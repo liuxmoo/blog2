@@ -1,0 +1,7 @@
+#!/bin/sh
+set -ex
+if docker inspect blog 2>&1 > /dev/null; then
+	docker rm -f blog
+fi
+
+docker run -d -p 9008:80 --name blog yzihua/blog

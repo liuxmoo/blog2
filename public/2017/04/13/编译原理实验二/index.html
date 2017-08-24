@@ -1,0 +1,464 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="如果有一天你累了，打个电话给自己吧 ！"><title>编译原理实验二 | Foryung</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/7.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">编译原理实验二</h1><a id="logo" href="/.">Foryung</a><p class="description">如果有一天你累了，打个电话给自己吧 ！</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/blog/"><i class="fa fa-book"> 博客</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">编译原理实验二</h1><div class="post-meta">Apr 13, 2017<span> | </span><span class="category"><a href="/categories/课程原理/">课程原理</a></span></div><div class="clear"><div id="toc" class="toc-article"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#实验二词法分析（小组验收）"><span class="toc-number">1.</span> <span class="toc-text">实验二词法分析（小组验收）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实验目的"><span class="toc-number">1.0.1.</span> <span class="toc-text">实验目的</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验时间"><span class="toc-number">1.0.2.</span> <span class="toc-text">实验时间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验内容"><span class="toc-number">1.0.3.</span> <span class="toc-text">实验内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验要求"><span class="toc-number">1.0.4.</span> <span class="toc-text">实验要求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#输入输出样例"><span class="toc-number">1.0.5.</span> <span class="toc-text">输入输出样例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验代码"><span class="toc-number">1.0.6.</span> <span class="toc-text">实验代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#测试样例"><span class="toc-number">1.0.7.</span> <span class="toc-text">测试样例</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#样例1"><span class="toc-number">1.0.7.1.</span> <span class="toc-text">样例1</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#样例2"><span class="toc-number">1.0.7.2.</span> <span class="toc-text">样例2</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#样例3"><span class="toc-number">1.0.7.3.</span> <span class="toc-text">样例3</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#样例4"><span class="toc-number">1.0.7.4.</span> <span class="toc-text">样例4</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#样例5"><span class="toc-number">1.0.7.5.</span> <span class="toc-text">样例5</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="post-content"><hr>
+<a id="more"></a>
+<h2 id="实验二词法分析（小组验收）"><a href="#实验二词法分析（小组验收）" class="headerlink" title="实验二词法分析（小组验收）"></a>实验二词法分析（小组验收）</h2><h4 id="实验目的"><a href="#实验目的" class="headerlink" title="实验目的"></a>实验目的</h4><ul>
+<li>根据 PL/0 语言的文法规范,编写 PL/0 语言的词法分析程序。</li>
+<li>通过设计调试词法分析程序,实现从源程序中分出各种单词的方法;<br>加深对课堂教学的理解;提高词法分析方法的实践能力。</li>
+<li>掌握从源程序文件中读取有效字符的方法和产生源程序的内部表示<br>文件的法。</li>
+<li>掌握词法分析的实现方法。</li>
+<li>上机调试编出的词法分析程序。<!-- more -->
+</li>
+</ul>
+<h4 id="实验时间"><a href="#实验时间" class="headerlink" title="实验时间"></a>实验时间</h4><ul>
+<li>4学时</li>
+</ul>
+<h4 id="实验内容"><a href="#实验内容" class="headerlink" title="实验内容"></a>实验内容</h4><ul>
+<li>输入 PL/0 语言程序,输出程序中各个单词符号(关键字、专用符号以及<br>其它标记)。<h4 id="实验要求"><a href="#实验要求" class="headerlink" title="实验要求"></a>实验要求</h4></li>
+<li>确定编译中单词种类、使用的表格、标识符与关键字的区分方法等。</li>
+<li>词法分析器读入 PL/0 语言源程序(文本文件),识别结果也以文本<br>文件保存。</li>
+<li>词法分析器的输出形式采用二元式序列,即:<br>(单词种类, 单词的值)</li>
+<li>源程序中字符不区分大小写,即:“a1”和“A1”是同一个标识符。</li>
+<li>准备至少 5 组测试用例,每组测试用例包括:输入源程序文件和输<br>出结果。</li>
+<li>测试用例必须包含所有的基本字、运算符、界符、以及各种标识符<br>和常数。对不合法单词进行分类考虑测试用例,特别是对一些运算<br>符要充分考虑各种组合。</li>
+</ul>
+<h4 id="输入输出样例"><a href="#输入输出样例" class="headerlink" title="输入输出样例"></a>输入输出样例</h4><h4 id="实验代码"><a href="#实验代码" class="headerlink" title="实验代码"></a>实验代码</h4><ul>
+<li>help.h <a href="https://github.com/Yisaer/DailyCode_In_ShuLife/blob/master/CompilePrinciple/ex02/help.h" target="_blank" rel="external">代码链接</a></li>
+</ul>
+<pre><code>//
+// Created by 高松 on 2017/4/6.
+//
+
+#ifndef EX02_HELP_H
+#define EX02_HELP_H
+
+bool IsAlpha(char ch){
+    if((ch &gt;=&apos;a&apos;&amp;&amp;ch&lt;=&apos;z&apos;)||(ch&gt;=&apos;A&apos;&amp;&amp;ch&lt;=&apos;Z&apos;)){
+        return true;
+    }
+    return false;
+}
+
+bool IsDigit(char ch){
+    if( ch&gt;=&apos;0&apos;&amp;&amp;ch&lt;=&apos;9&apos;){
+        return true;
+    }
+    return false;
+}
+
+bool IsAlphOrNum(char ch){
+    if(IsAlpha(ch)){
+        return true;
+    }
+    if(IsDigit(ch)){
+        return true;
+    }
+    return false;
+}
+#endif //EX02_HELP_H
+</code></pre><ul>
+<li>main.cpp <a href="https://github.com/Yisaer/DailyCode_In_ShuLife/blob/master/CompilePrinciple/ex02/main.cpp" target="_blank" rel="external">代码链接</a></li>
+</ul>
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;fstream&gt;
+#include &lt;string&gt;
+#include &lt;map&gt;
+#include &quot;help.h&quot;
+#define FILEPATH &quot;test.txt&quot;
+#define TOKENPATH &quot;Mapper.txt&quot;
+#define TABSIZE 10
+
+char prog[80],token[10];
+char ch;
+int syn,p,m = 0,n,row,sum = 0;
+char *rwtab[TABSIZE] = {
+        &quot;begin&quot;,&quot;if&quot;,&quot;then&quot;,&quot;while&quot;,&quot;do&quot;,&quot;end&quot;,&quot;read&quot;,&quot;write&quot;,&quot;const&quot;,&quot;var&quot;,
+};
+
+map&lt;int ,string&gt; Mapper;
+
+
+
+void scaner(){
+    for(n = 0;n&lt;8;n++){
+        token[n] = NULL;
+    }
+    ch = prog[p++];
+    while(ch == &apos; &apos;){
+        ch = prog[p];
+        p++;
+    }
+    if(IsAlpha(ch)){
+        m = 0;
+        while(IsAlphOrNum(ch)){
+            token[m++] = ch;
+            ch = prog[p++];
+        }
+        token[m++] = 0;
+        p--;
+        syn = 10;
+        for(n = 0;n&lt;TABSIZE;n++){
+            if(strcmp(token,rwtab[n])==0){
+                syn = n+31;
+                break;
+            }
+        }
+    }
+    else if( IsDigit(ch)){
+        sum  = 0;
+        while(isdigit(ch)){
+            sum = sum*10 +ch-&apos;0&apos;;
+            ch = prog[p++];
+        }
+        p--;
+        syn = 11;
+        if(sum&gt;32767){
+            syn = -1;
+        }
+    }else switch(ch){
+            case &apos;&lt;&apos;: m = 0; token[m++] = ch;
+                ch = prog[p++];
+                if(ch == &apos;&gt;&apos;){
+                    syn = 21;
+                    token[m++]  = ch;
+                }
+                else if(ch == &apos;=&apos;){
+                    syn = 2;;
+                    token[m++] = ch;
+                }
+                else {
+                    syn = 23;
+                    p--;
+                }
+                break;
+            case &apos;&gt;&apos;: m = 0; token[m++] = ch;
+                ch = prog[p++];
+                if( ch == &apos;=&apos;){
+                    syn = 24;
+                    token[m++] = ch;
+                }
+                else{
+                    syn = 20;
+                    p--;
+                }
+                break;
+            case &apos;:&apos;: m = 0;token[m++] = ch;
+                ch = prog[p++];
+                if( ch ==&apos;=&apos;){
+                    syn = 18;
+                    token[m++] = ch;
+                }
+                else{
+                    syn = 17;
+                    p--;
+                }
+                break;
+            case &apos;,&apos; : syn=19;token[0] = ch; break;
+            case &apos;*&apos; : syn=13;token[0] = ch; break;
+            case &apos;/&apos; : syn=14;token[0] = ch; break;
+            case &apos;+&apos; : syn=15;token[0] = ch; break;
+            case &apos;-&apos; : syn=16;token[0] = ch; break;
+            case &apos;=&apos; : syn=25;token[0] = ch; break;
+            case &apos;;&apos; : syn=26;token[0] = ch; break;
+            case &apos;(&apos; : syn=27;token[0] = ch; break;
+            case &apos;)&apos; : syn=28;token[0] = ch; break;
+            case &apos;.&apos; : syn=0; token[0] = ch; break;
+            default: syn = -1; break;
+        }
+}
+
+int main() {
+    Mapper.clear();
+    p = 0;
+    row = 1;
+    ifstream MapFile(TOKENPATH);
+    string line;
+    if(MapFile){
+        while(getline(MapFile,line)){
+            bool IsNum = false;
+            int sum = 0;
+            string token = &quot;&quot;;
+            for(int  i =0;i&lt;line.size();i++){
+                if( line[i] ==&apos; &apos;){
+                    IsNum = true;
+                    continue;
+                }
+                if(IsNum == true ){
+                    sum = sum*10+(char)line[i]-&apos;0&apos;;
+                }
+                else {
+                    token += line[i];
+                }
+            }
+            Mapper[sum] = token;
+        }
+    }
+    Mapper[0] = &quot;peroid&quot;;
+
+//    map&lt;int,string&gt;:: iterator it;
+//    for(it = Mapper.begin();it!=Mapper.end();it++){
+//        cout&lt;&lt;it-&gt;first&lt;&lt;&quot;,&quot;&lt;&lt;it-&gt;second&lt;&lt;endl;
+//    }
+//    return 0 ;
+
+    ifstream in(FILEPATH);
+    if(in){
+        while(getline(in,line)){
+            char c[100];
+            strcpy(c,line.c_str());
+            for(int i = 0;i&lt;strlen(c);i++){
+                ch = line[i];
+                prog[p++] = ch;
+                if(ch == &apos;.&apos;){
+                    goto A;
+                }
+            }
+        }
+    }
+//    for(int i = 0;i&lt;p;i++){
+//        cout&lt;&lt;prog[i];
+//    }
+//    return 0;
+
+    A:
+    p = 0;
+    do {
+        scaner();
+//        cout&lt;&lt;&quot;syn = &quot;&lt;&lt;syn&lt;&lt;endl;
+        switch(syn){
+            case 11: cout&lt;&lt;&quot;(&quot;&lt;&lt;Mapper[11]&lt;&lt;&quot; &quot;&lt;&lt;sum&lt;&lt;&quot;)&quot;&lt;&lt;endl;break;
+            case -1: cout&lt;&lt;&quot; Error in row &quot;&lt;&lt;endl;
+            default: cout&lt;&lt;&quot;(&quot;&lt;&lt;Mapper[syn]&lt;&lt;&quot; &quot;&lt;&lt;token&lt;&lt;&quot;)&quot;&lt;&lt;endl;break;
+        }
+    }while(syn!=0);
+
+    return 0;
+}
+</code></pre><h4 id="测试样例"><a href="#测试样例" class="headerlink" title="测试样例"></a>测试样例</h4><h5 id="样例1"><a href="#样例1" class="headerlink" title="样例1"></a>样例1</h5><ul>
+<li>题目给的样例</li>
+</ul>
+<pre><code>const a = 10;
+var b,c;
+begin
+ read(b);
+ c:=a+b;
+ wrrite(c)
+ end.
+</code></pre><ul>
+<li>输出结果</li>
+</ul>
+<pre><code>(const const)
+(Identity a)
+(Equal =)
+(Digit 10)
+(semicolon ;)
+(var var)
+(Identity b)
+(comma ,)
+(Identity c)
+(semicolon ;)
+(Beginsys begin)
+(read read)
+(lparen ()
+(Identity b)
+(rparen ))
+(semicolon ;)
+(Identity c)
+(becomes :=)
+(Identity a)
+(Plus +)
+(Identity b)
+(semicolon ;)
+(Identity wrrite)
+(lparen ()
+(Identity c)
+(rparen ))
+(End end)
+(peroid .)
+</code></pre><h5 id="样例2"><a href="#样例2" class="headerlink" title="样例2"></a>样例2</h5><ul>
+<li>包含大写的样例</li>
+</ul>
+<pre><code>CONST a=10;
+VAR b,c;
+begin
+ read(b);
+ c:=a+b;
+ wrrite(c)
+ end.
+</code></pre><ul>
+<li>输出结果</li>
+</ul>
+<pre><code>(Identity CONST)
+(Identity a)
+(Equal =)
+(Digit 10)
+(semicolon ;)
+(Identity VAR)
+(Identity b)
+(comma ,)
+(Identity c)
+(semicolon ;)
+(Beginsys begin)
+(read read)
+(lparen ()
+(Identity b)
+(rparen ))
+(semicolon ;)
+(Identity c)
+(becomes :=)
+(Identity a)
+(Plus +)
+(Identity b)
+(semicolon ;)
+(Identity wrrite)
+(lparen ()
+(Identity c)
+(rparen ))
+(End end)
+(peroid .)
+</code></pre><h5 id="样例3"><a href="#样例3" class="headerlink" title="样例3"></a>样例3</h5><ul>
+<li>拼写有错的样例</li>
+</ul>
+<pre><code>cons a = 10;
+var b,c;
+begin
+ read(b);
+ c:=a+b;
+ wrrite(c)
+ end.
+</code></pre><ul>
+<li>输出结果</li>
+</ul>
+<pre><code>(Identity cons)
+(Identity a)
+(Equal =)
+(Digit 10)
+(semicolon ;)
+(var var)
+(Identity b)
+(comma ,)
+(Identity c)
+(semicolon ;)
+(Beginsys begin)
+(read read)
+(lparen ()
+(Identity b)
+(rparen ))
+(semicolon ;)
+(Identity c)
+(becomes :=)
+(Identity a)
+(Plus +)
+(Identity b)
+(semicolon ;)
+(Identity wrrite)
+(lparen ()
+(Identity c)
+(rparen ))
+(End end)
+(peroid .)
+</code></pre><h5 id="样例4"><a href="#样例4" class="headerlink" title="样例4"></a>样例4</h5><ul>
+<li><p>包含大于等于号的样例</p>
+<p>  const a = 10;<br>  var b,c;<br>  begin<br>   read(b);<br>   if(a&gt;=b) then</p>
+<pre><code>c:=b+a;
+</code></pre><p>   write(c);<br>  end.</p>
+</li>
+<li>输出结果</li>
+</ul>
+<pre><code>(const const)
+(Identity a)
+(Equal =)
+(Digit 10)
+(semicolon ;)
+(var var)
+(Identity b)
+(comma ,)
+(Identity c)
+(semicolon ;)
+(Beginsys begin)
+(read read)
+(lparen ()
+(Identity b)
+(rparen ))
+(semicolon ;)
+(Ifsys if)
+(lparen ()
+(Identity a)
+(EqualOrGreat &gt;=)
+(Identity b)
+(rparen ))
+(Thensys then)
+(Identity c)
+(becomes :=)
+(Identity b)
+(Plus +)
+(Identity a)
+(semicolon ;)
+(write write)
+(lparen ()
+(Identity c)
+(rparen ))
+(semicolon ;)
+(End end)
+(peroid .)
+</code></pre><h5 id="样例5"><a href="#样例5" class="headerlink" title="样例5"></a>样例5</h5><ul>
+<li>包含空格回车的样例</li>
+</ul>
+<pre><code>const a = 10;
+var b, c;
+
+
+
+begin
+ read(b);
+ if(a&gt;=b) then
+   c:=b+a;
+ write(c);
+end.
+</code></pre><ul>
+<li>输出结果</li>
+</ul>
+<pre><code>(const const)
+(Identity a)
+(Equal =)
+(Digit 10)
+(semicolon ;)
+(var var)
+(Identity b)
+(comma ,)
+(Identity c)
+(semicolon ;)
+(Beginsys begin)
+(read read)
+(lparen ()
+(Identity b)
+(rparen ))
+(semicolon ;)
+(Ifsys if)
+(lparen ()
+(Identity a)
+(EqualOrGreat &gt;=)
+(Identity b)
+(rparen ))
+(Thensys then)
+(Identity c)
+(becomes :=)
+(Identity b)
+(Plus +)
+(Identity a)
+(semicolon ;)
+(write write)
+(lparen ()
+(Identity c)
+(rparen ))
+(semicolon ;)
+(End end)
+(peroid .)
+</code></pre></div><div class="tags"><a href="/tags/编译原理/">编译原理</a></div><div class="post-nav"><a href="/2017/04/15/单机文件系统之Linux文件系统/" class="pre">单机文件系统之Linux文件系统</a><a href="/2017/03/22/google浏览器插件开发入门/" class="next">英语学习小工具</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/课程原理/">课程原理</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/k8s/" style="font-size: 15px;">k8s</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/chrome/" style="font-size: 15px;">chrome</a> <a href="/tags/hugo/" style="font-size: 15px;">hugo</a> <a href="/tags/实习/" style="font-size: 15px;">实习</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/系统结构/" style="font-size: 15px;">系统结构</a> <a href="/tags/光伏项目/" style="font-size: 15px;">光伏项目</a> <a href="/tags/编译原理/" style="font-size: 15px;">编译原理</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/24/hello-world/">hexo 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/23/实习心得/">实习心得</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/23/ingress_API/">Ingress_API</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/23/ingress-controller/">Ingress Controller</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/17/hugo使用笔记/">Hugo使用笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/17/nginx/">nginx 使用笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/24/光伏项目进度/">光伏项目_会议室系统进度</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/daocloud实习笔记/">daocloud实习笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/29/docker使用笔记/">docker使用笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/26/mongodb使用总结/">mongodb使用总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.github.com/yahaa" title="Github" target="_blank">Github</a><ul></ul><a href="https://cloud.docker.com/swarm/yzihua/repository/list" title="Dockerhub" target="_blank">Dockerhub</a><ul></ul><a href="https://git.oschina.net/yahaa" title="码云" target="_blank">码云</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2017 <a href="/." rel="nofollow">Foryung.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
