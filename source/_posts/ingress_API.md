@@ -402,7 +402,7 @@ toc: true
 * 获取某个Ingress 的详情数据 API 调用示例
 
 
-```json
+ ``` json
       请求：
       curl -X GET http://127.0.0.1:18081/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test2
 
@@ -447,7 +447,7 @@ toc: true
               ]
             }
           }
-        }
+        }  
 ```
 
 * 获取所有 Ingress 的详细数据 API
@@ -519,3 +519,63 @@ toc: true
       GET /apis/extensions/v1beta1/ingresses
 
 * 获取所namespace 下的所有 Ingress API 调用示例
+
+
+```json
+    请求：
+    curl -X GET http://127.0.0.1:18081/apis/extensions/v1beta1/ingresses
+
+
+    返回：
+
+    {
+      "kind": "IngressList",
+      "apiVersion": "extensions/v1beta1",
+      "metadata": {
+        "selfLink": "/apis/extensions/v1beta1/ingresses",
+        "resourceVersion": "261710"
+      },
+      "items": [
+        {
+          "metadata": {
+            "name": "test2",
+            "namespace": "kube-system",
+            "selfLink": "/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test2",
+            "uid": "21a8fb07-87eb-11e7-9381-0242ac130006",
+            "resourceVersion": "148281",
+            "generation": 1,
+            "creationTimestamp": "2017-08-23T10:09:20Z"
+          },
+          "spec": {
+            "rules": [
+              {
+                "host": "www.for.com",
+                "http": {
+                  "paths": [
+                    {
+                      "path": "/fooo12",
+                      "backend": {
+                        "serviceName": "kubernetes-dashboard",
+                        "servicePort": 19090
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "status": {
+            "loadBalancer": {
+              "ingress": [
+                {
+                  "ip": "192.168.2.80"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+
+
+```
