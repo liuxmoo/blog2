@@ -1,5 +1,5 @@
 ---
-title: 
+title:
 date: 2017-08-23 23:23:59
 ---
 
@@ -29,6 +29,9 @@ date: 2017-08-23 23:23:59
 
 
 ### 详询：
+* 邮箱 zihuayuan68@qq.com
+* 手机 18721808563
+* QQ 1477765176
 * http://shucloud.shu.edu.cn/join_us
 
 ### Github主页：
