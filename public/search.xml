@@ -4,7 +4,7 @@
     
     <entry>
       <title><![CDATA[招新]]></title>
-      <url>/2017/08/28/%E6%8B%9B%E6%96%B0/</url>
+      <url>/about/2017/08/28/%E6%8B%9B%E6%96%B0/</url>
       <content type="html"><![CDATA[<h1 id="Let’s-code"><a href="#Let’s-code" class="headerlink" title="Let’s code"></a><center>Let’s code</center></h1><h6 id="上海大学光伏蓝队招募"><a href="#上海大学光伏蓝队招募" class="headerlink" title=" 上海大学光伏蓝队招募"></a><center> 上海大学光伏蓝队招募</center></h6><h3 id="指导老师"><a href="#指导老师" class="headerlink" title="指导老师:"></a>指导老师:</h3><ul>
 <li>朱文浩 （硕士生导师）</li>
 </ul>
@@ -44,7 +44,7 @@
     
     <entry>
       <title><![CDATA[ufw使用笔记]]></title>
-      <url>/2017/08/26/ufw%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</url>
+      <url>/about/2017/08/26/ufw%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</url>
       <content type="html"><![CDATA[<p>最近在使用学校的云服务器，真心烦，各种端口限制，不过还好，在被限制的情况下逼迫自己学会使用nginx做反向代理，同时会用ufw。<br>面是记录自己使用ufw的一些记录，防止自己忘掉。</p>
 <h3 id="安装ufw"><a href="#安装ufw" class="headerlink" title="安装ufw"></a>安装ufw</h3><ul>
 <li>sudo apt-get install ufw</li>
@@ -69,7 +69,7 @@
     
     <entry>
       <title><![CDATA[Ubuntu16.04 软件源]]></title>
-      <url>/2017/08/24/Ingress%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88/</url>
+      <url>/about/2017/08/24/Ingress%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88/</url>
       <content type="html"><![CDATA[<p>之前一直用ubuntu14.04,那时安装软件基本没什么问题，但是到了ubuntu16.04各种问题都出现了，比如通过deb包安装搜狗输入法，docker等时依赖无法下载，经过一番折腾，发现是软件源不正常导致，所以想把这一折腾结构记录一下以免下次自己又得去折腾。</p>
 <h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><ul>
 <li>sudo cp /etc/apt/source.list /etc/apt/backup_source.list 备份</li>
@@ -92,7 +92,7 @@
     
     <entry>
       <title><![CDATA[hexo 使用]]></title>
-      <url>/2017/08/24/hello-world/</url>
+      <url>/about/2017/08/24/hello-world/</url>
       <content type="html"><![CDATA[<p>博客迁移到 hexo<br><a id="more"></a></p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo <span class="keyword">new</span> <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
@@ -109,7 +109,7 @@
     
     <entry>
       <title><![CDATA[实习心得]]></title>
-      <url>/2017/08/23/%E5%AE%9E%E4%B9%A0%E5%BF%83%E5%BE%97/</url>
+      <url>/about/2017/08/23/%E5%AE%9E%E4%B9%A0%E5%BF%83%E5%BE%97/</url>
       <content type="html"><![CDATA[<p>了解了解阿斯顿发链接<br>案例四大家垃圾上单；发</p>
 ]]></content>
       
@@ -124,7 +124,7 @@
     
     <entry>
       <title><![CDATA[Ingress_API]]></title>
-      <url>/2017/08/23/ingress_API/</url>
+      <url>/about/2017/08/23/ingress_API/</url>
       <content type="html"><![CDATA[<h3 id="Ingresses-API使用"><a href="#Ingresses-API使用" class="headerlink" title="Ingresses API使用"></a>Ingresses API使用</h3><h4 id="Ingress-写操作"><a href="#Ingress-写操作" class="headerlink" title="Ingress 写操作"></a>Ingress 写操作</h4><ul>
 <li><p>创建 ingress API</p>
 <pre><code>POST /apis/extensions/v1beta1/namespaces/{namespace}/ingresses
@@ -201,7 +201,7 @@
     
     <entry>
       <title><![CDATA[Ingress Controller]]></title>
-      <url>/2017/08/23/ingress-controller/</url>
+      <url>/about/2017/08/23/ingress-controller/</url>
       <content type="html"><![CDATA[<h3 id="Ingress-Controller-配置文件"><a href="#Ingress-Controller-配置文件" class="headerlink" title="Ingress Controller 配置文件"></a>Ingress Controller 配置文件</h3><ul>
 <li>curl get 请求</li>
 </ul>
@@ -238,7 +238,7 @@ spec:
     
     <entry>
       <title><![CDATA[Hugo使用笔记]]></title>
-      <url>/2017/08/17/hugo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</url>
+      <url>/about/2017/08/17/hugo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</url>
       <content type="html"><![CDATA[<h3 id="hugo-使用笔记"><a href="#hugo-使用笔记" class="headerlink" title="hugo 使用笔记"></a>hugo 使用笔记</h3><h4 id="Go-安装"><a href="#Go-安装" class="headerlink" title="Go 安装"></a>Go 安装</h4><ul>
 <li>sudo apt-get install golang<h4 id="Hugo-deb包下载"><a href="#Hugo-deb包下载" class="headerlink" title="Hugo deb包下载"></a>Hugo deb包下载</h4></li>
 <li><a href="https://github.com/gohugoio/hugo/releases" target="_blank" rel="external">下载地址</a></li>
@@ -256,7 +256,7 @@ spec:
     
     <entry>
       <title><![CDATA[nginx 使用笔记]]></title>
-      <url>/2017/08/17/nginx/</url>
+      <url>/about/2017/08/17/nginx/</url>
       <content type="html"><![CDATA[<h3 id="nginx-使用笔记"><a href="#nginx-使用笔记" class="headerlink" title="nginx 使用笔记"></a>nginx 使用笔记</h3><h4 id="安装-ubuntu"><a href="#安装-ubuntu" class="headerlink" title="安装 (ubuntu)"></a>安装 (ubuntu)</h4><ul>
 <li>sudo apt-get update</li>
 <li>sudo apt-get install nginx</li>
@@ -296,7 +296,7 @@ spec:
     
     <entry>
       <title><![CDATA[光伏项目_会议室系统进度]]></title>
-      <url>/2017/07/24/%E5%85%89%E4%BC%8F%E9%A1%B9%E7%9B%AE%E8%BF%9B%E5%BA%A6/</url>
+      <url>/about/2017/07/24/%E5%85%89%E4%BC%8F%E9%A1%B9%E7%9B%AE%E8%BF%9B%E5%BA%A6/</url>
       <content type="html"><![CDATA[<a id="more"></a>
 <h3 id="会议室系统（负责人：罗成盛）"><a href="#会议室系统（负责人：罗成盛）" class="headerlink" title="会议室系统（负责人：罗成盛）"></a>会议室系统（负责人：罗成盛）</h3><h4 id="已完成"><a href="#已完成" class="headerlink" title="已完成"></a>已完成</h4><ul>
 <li>完成系统所有界面设计，身份验证，会议室查询，个人信息显示，会议室借用历史</li>
@@ -346,7 +346,7 @@ spec:
     
     <entry>
       <title><![CDATA[daocloud实习笔记]]></title>
-      <url>/2017/07/05/daocloud%E5%AE%9E%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+      <url>/about/2017/07/05/daocloud%E5%AE%9E%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
       <content type="html"><![CDATA[<h3 id="第一天"><a href="#第一天" class="headerlink" title="第一天"></a>第一天</h3><ul>
 <li>熟悉daocloud 设计的产品　DCE</li>
 </ul>
@@ -390,7 +390,7 @@ SSL_CERT_FILE=/home/zihua/DaoCloud/dce-deployer/certs/https/dce.crt
     
     <entry>
       <title><![CDATA[docker使用笔记]]></title>
-      <url>/2017/06/29/docker%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</url>
+      <url>/about/2017/06/29/docker%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</url>
       <content type="html"><![CDATA[<h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h3><ol>
 <li>curl -sSL <a href="http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/intranet" target="_blank" rel="external">http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/intranet</a> | sh -</li>
 <li>非root用户使用docker sudo usermod -aG docker userName</li>
@@ -452,7 +452,7 @@ mongo 192.168.1.200:27017/test -u user -p password
     
     <entry>
       <title><![CDATA[mongodb使用总结]]></title>
-      <url>/2017/06/26/mongodb%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</url>
+      <url>/about/2017/06/26/mongodb%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</url>
       <content type="html"><![CDATA[<h3 id="Mongodb修改为密码登录"><a href="#Mongodb修改为密码登录" class="headerlink" title="Mongodb修改为密码登录"></a>Mongodb修改为密码登录</h3><ul>
 <li>无密码登录到mongodb</li>
 </ul>
@@ -512,7 +512,7 @@ mongo 192.168.1.200:27017/test -u user -p password
     
     <entry>
       <title><![CDATA[编译原理研讨]]></title>
-      <url>/2017/05/17/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E7%A0%94%E8%AE%A8/</url>
+      <url>/about/2017/05/17/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E7%A0%94%E8%AE%A8/</url>
       <content type="html"><![CDATA[<h2 id="第二题"><a href="#第二题" class="headerlink" title="第二题"></a>第二题</h2><p>设有文法　G[S’];</p>
 <ol>
 <li>S’ -&gt; S  </li>
@@ -557,7 +557,7 @@ mongo 192.168.1.200:27017/test -u user -p password
     
     <entry>
       <title><![CDATA[体系结构期末笔记]]></title>
-      <url>/2017/05/17/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E6%9C%9F%E6%9C%AB%E7%AC%94%E8%AE%B0/</url>
+      <url>/about/2017/05/17/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E6%9C%9F%E6%9C%AB%E7%AC%94%E8%AE%B0/</url>
       <content type="html"></content>
       
         
@@ -571,7 +571,7 @@ mongo 192.168.1.200:27017/test -u user -p password
     
     <entry>
       <title><![CDATA[单机文件系统之Linux文件系统]]></title>
-      <url>/2017/04/15/%E5%8D%95%E6%9C%BA%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%B9%8BLinux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</url>
+      <url>/about/2017/04/15/%E5%8D%95%E6%9C%BA%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%B9%8BLinux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</url>
       <content type="html"><![CDATA[<h2 id="单机文件系统之Linux文件系统"><a href="#单机文件系统之Linux文件系统" class="headerlink" title="单机文件系统之Linux文件系统"></a><center>单机文件系统之Linux文件系统</center></h2><h5 id="袁子华-14122260"><a href="#袁子华-14122260" class="headerlink" title="袁子华 14122260"></a><center>袁子华 14122260</center></h5><h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><ul>
 <li>引入</li>
 <li>硬盘的组成回顾</li>
@@ -789,7 +789,7 @@ if __name__ == &apos;__main__&apos;:
     
     <entry>
       <title><![CDATA[编译原理实验二]]></title>
-      <url>/2017/04/13/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E5%AE%9E%E9%AA%8C%E4%BA%8C/</url>
+      <url>/about/2017/04/13/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E5%AE%9E%E9%AA%8C%E4%BA%8C/</url>
       <content type="html"><![CDATA[<hr>
 <a id="more"></a>
 <h2 id="实验二词法分析（小组验收）"><a href="#实验二词法分析（小组验收）" class="headerlink" title="实验二词法分析（小组验收）"></a>实验二词法分析（小组验收）</h2><h4 id="实验目的"><a href="#实验目的" class="headerlink" title="实验目的"></a>实验目的</h4><ul>
@@ -1266,7 +1266,7 @@ end.
     
     <entry>
       <title><![CDATA[英语学习小工具]]></title>
-      <url>/2017/03/22/google%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A8/</url>
+      <url>/about/2017/03/22/google%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A8/</url>
       <content type="html"><![CDATA[<hr>
 <a id="more"></a>
 <h1 id="英语学习小工具"><a href="#英语学习小工具" class="headerlink" title="英语学习小工具"></a>英语学习小工具</h1><h3 id="项目来源"><a href="#项目来源" class="headerlink" title="项目来源"></a>项目来源</h3><ul>
@@ -1290,7 +1290,7 @@ end.
     
     <entry>
       <title><![CDATA[Markdown语法入门]]></title>
-      <url>/2017/03/18/Markdown%E8%AF%AD%E6%B3%95%E5%85%A5%E9%97%A8/</url>
+      <url>/about/2017/03/18/Markdown%E8%AF%AD%E6%B3%95%E5%85%A5%E9%97%A8/</url>
       <content type="html"><![CDATA[<h1 id="我久违的笔记"><a href="#我久违的笔记" class="headerlink" title="我久违的笔记"></a>我久违的笔记</h1><h2 id="写给自己"><a href="#写给自己" class="headerlink" title="写给自己"></a>写给自己</h2><p>很久前打算每天坚持写一些总结，日记用以记录自己的生活。</p>
 <p>但是每次都被自己的懒惰给征服了，希望这次自己能坚持下去吧！<br><a id="more"></a></p>
 <h3 id="markdown-练习"><a href="#markdown-练习" class="headerlink" title="markdown 练习"></a>markdown 练习</h3><p>一个人一个<em>非常懒惰</em> 的人</p>
