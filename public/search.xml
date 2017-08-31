@@ -3,6 +3,21 @@
   
     
     <entry>
+      <title><![CDATA[docker远程调用笔记]]></title>
+      <url>/2017/08/31/docker%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E7%AC%94%E8%AE%B0/</url>
+      <content type="html"><![CDATA[<p>实习这一段时间一直做的是有关docker方面的开发，公司代码测试非常困难</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> docker </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[关于calico使用旧的configmap的解决方案]]></title>
       <url>/2017/08/29/%E5%85%B3%E4%BA%8Ecalico%E4%BD%BF%E7%94%A8%E6%97%A7%E7%9A%84configmap%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</url>
       <content type="html"></content>
