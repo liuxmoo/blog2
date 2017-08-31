@@ -3,6 +3,20 @@
   
     
     <entry>
+      <title><![CDATA[关于calico使用旧的configmap的解决方案]]></title>
+      <url>/2017/08/29/%E5%85%B3%E4%BA%8Ecalico%E4%BD%BF%E7%94%A8%E6%97%A7%E7%9A%84configmap%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</url>
+      <content type="html"></content>
+      
+        
+        <tags>
+            
+            <tag> k8s </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[招新]]></title>
       <url>/2017/08/28/%E6%8B%9B%E6%96%B0/</url>
       <content type="html"><![CDATA[<h1 id="Let’s-code"><a href="#Let’s-code" class="headerlink" title="Let’s code"></a><center>Let’s code</center></h1><h6 id="上海大学光伏蓝队招募"><a href="#上海大学光伏蓝队招募" class="headerlink" title=" 上海大学光伏蓝队招募"></a><center> 上海大学光伏蓝队招募</center></h6><h3 id="指导老师"><a href="#指导老师" class="headerlink" title="指导老师:"></a>指导老师:</h3><ul>
