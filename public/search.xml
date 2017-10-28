@@ -3,6 +3,377 @@
   
     
     <entry>
+      <title><![CDATA[关于http,https流量转socks5流量的一些笔记]]></title>
+      <url>/2017/10/28/%E5%85%B3%E4%BA%8Ehttp-https%E6%B5%81%E9%87%8F%E8%BD%ACsocks5%E6%B5%81%E9%87%8F%E7%9A%84%E4%B8%80%E4%BA%9B%E7%AC%94%E8%AE%B0/</url>
+      <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在linux（ubuntu）上使用过ssr的同学都知道，ssr使用的是socks5协议，并且在本地默认监听的是1080端口，我们需要在浏览器中使用 SwitchyOmega 插件才能正常FQ，那么问题来了，我们平时在命令行下使用wget，go get,mvn等走的都是http/https，所以我们是无法直接使用127.0.0.1:1080做代理的。怎么办？我们需要把http/https流量转发都1080端口即可</p>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><ul>
+<li><p>安装polipo</p>
+<pre><code>sudo apt-get install polipo
+</code></pre></li>
+<li><p>修改配置文件</p>
+<pre><code>sudo vim /etc/polipo/config   #修改为如下
+
+# This file only needs to list configuration variables that deviate
+# from the default values.  See /usr/share/doc/polipo/examples/config.sample
+# and &quot;polipo -v&quot; for variables you can tweak and further information.
+
+logSyslog = true
+logFile = /var/log/polipo/polipo.log
+proxyAddress = &quot;127.0.0.1&quot;
+proxyPort = 8118
+
+socksParentProxy = &quot;127.0.0.1:1080&quot;
+socksProxyType = socks5
+</code></pre></li>
+<li><p>重启 polipo</p>
+<pre><code>sudo /etc/init.d/polipo restart
+</code></pre></li>
+<li><p>测试</p>
+<pre><code>export http_proxy=&quot;http://127.0.0.1:8118/&quot;
+curl ifconfig.me
+
+//稍等片刻可以看到终端显示代理服务器ip地址
+</code></pre></li>
+<li><p>完成上面步骤那么我们就可以通过 127.0.0.1:8118把http/https流量转发到127.0.0.1:1080端口的socks5上了</p>
+</li>
+</ul>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>上面的记录主要是我在使用go get命令下载三方依赖的时候老是被xxxxx,那么完成了上面步骤，我就可以通过走8118端口用go get 下载到我需要的依赖了，我怎么做？看下面步骤……</p>
+<h3 id="给go-get-命令走socks5下载到我想要的东西"><a href="#给go-get-命令走socks5下载到我想要的东西" class="headerlink" title="给go get 命令走socks5下载到我想要的东西"></a>给go get 命令走socks5下载到我想要的东西</h3><ul>
+<li><p>修改环境变量</p>
+<pre><code>vim .bashrc
+//在后面追加下面配置
+alias  goo=&apos;http_proxy=127.0.0.1:8118 https_proxy=127.0.0.1:8118 go&apos;
+
+//使.bashrc生效
+source .bashrc
+</code></pre></li>
+<li><p>使用</p>
+<pre><code>goo get &lt;xxxxxxxxxx&gt;      //
+</code></pre></li>
+</ul>
+<h6 id="以上纯属个人笔记，难免有不当之处"><a href="#以上纯属个人笔记，难免有不当之处" class="headerlink" title="以上纯属个人笔记，难免有不当之处"></a>以上纯属个人笔记，难免有不当之处</h6>]]></content>
+      
+        
+        <tags>
+            
+            <tag> network </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title></title>
+      <url>/2017/09/25/%E7%BD%91%E6%8A%95%E7%AE%80%E5%8E%86/</url>
+      <content type="html"><![CDATA[<h2 id="个人简历"><a href="#个人简历" class="headerlink" title=" 个人简历"></a><center> 个人简历</center></h2><h4 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h4><ul>
+<li>袁子华/男/1994</li>
+<li>上海大学计/算机科学与技术/本科</li>
+</ul>
+<ul>
+<li>技术博客：<a href="http://blog.foryung.com" target="_blank" rel="external">http://blog.foryung.com</a></li>
+<li>GitHub主页：<a href="https://github.com/yahaa" target="_blank" rel="external">https://github.com/yahaa</a></li>
+<li>期望职位：后端开发工程师</li>
+<li>期望城市：上海</li>
+<li>联系电话：18721808563</li>
+<li>Email：zihua@foryung.com</li>
+</ul>
+<h4 id="学习概况"><a href="#学习概况" class="headerlink" title="学习概况"></a>学习概况</h4><ul>
+<li>均绩点：3.25/4.0</li>
+<li>专业排名：前20%</li>
+<li>获奖情况：<ul>
+<li>2015年国家励志奖学金</li>
+<li>2016年CCPC编程大赛吉林大学赛区优胜奖</li>
+<li>2017年国家励志奖学金</li>
+</ul>
+</li>
+<li>证书：<ul>
+<li>全国大学英语四级证书</li>
+<li>2015年全球软件开发者志愿者证书</li>
+</ul>
+</li>
+</ul>
+<h4 id="主修课程"><a href="#主修课程" class="headerlink" title="主修课程"></a>主修课程</h4><ul>
+<li>专业课:算法与数据结构，离散数学,计算机网络，操作系统，系统结构，计算机组成原理，汇编，面向对象程序设计，数据库原理，软件工程</li>
+<li>专业选修：组合数学，oracle数据库，算法设计与分析，模式识别，Java语言程序设计，JavaEE，电子商务</li>
+</ul>
+<h4 id="个人技能"><a href="#个人技能" class="headerlink" title="个人技能"></a>个人技能</h4><ul>
+<li>熟练使用Java,Python进行项目开发</li>
+<li>熟悉Springboot,SpringMVC,Spring,Hibernate，Flask等框架，对Spring源码有一定的了解</li>
+<li>熟练使用Docker,熟悉Kubernetes,能够熟练使用Docker API,K8S API进行二次开发</li>
+<li>熟悉Mongodb,MySQL，并能在项目中灵活的使用</li>
+<li>熟悉TCP/IP协议,Rabbitmq,WebSocket,Ngnix,熟练使用Linux系统</li>
+<li>熟悉HTML,CSS,Ajax,jQuery,Bootstrap</li>
+<li>有很好的项目管理经验,熟练使用Jenkins+Docker+Git进行项目的自动化部署</li>
+<li>有良好的数据结构功底和算法技能，是校ACM集训队成员</li>
+<li>有很好的组织能力，现任上海大学光伏蓝队队长</li>
+<li>有很强的学习能力</li>
+</ul>
+<h4 id="项目经历"><a href="#项目经历" class="headerlink" title="项目经历"></a>项目经历</h4><ul>
+<li>2017.07 - 2017.09 DaoCloud Enterprise（DCE) ——容器平台研发工程师(实习)<pre><code>1.实习期间参与DCE开发后能够熟练使用docker，以及docker compose。
+2.熟悉k8s架构，并能熟练使用k8s API进行二次开发，在实习期间完成DCE集成Ingress设计。
+</code></pre></li>
+<li>2017.06 - 至今  上海大学光伏监控系统  ——Java后端开发<pre><code>1.用springboot框架实现，给前端提供Restful API。
+2.用Rabbitmq解决系统发送邮件监控系统核心业务解耦。
+3.用Websocket实现数据的实时监控。
+4.用Redis+Websocket实现联系管理员以及管理员可以查看当前在线客户的功能。
+5.通过串口编程实现逆变器以及气象仪数据采集。
+6.自己实现JWT实现系统灵活的权限认证。
+7.用Jenkins+docker实现前后端项目自动化构建。
+8.用Nginx解决负载均衡。
+</code></pre></li>
+<li>2017.05 - 2017.06 上海大学新生问答系统<pre><code>1.用Spring+SpringMVC+Hibernate框架实现。
+2.界面用bootstrap+jquery模拟stackoverflows。
+3.用Dockerfile打包成镜像，实现一次构建任意系统都可以运行。
+</code></pre></li>
+<li>2017.06 - 2017.06 上海大学会议室预约系统<pre><code>1.采用上海大学开放统一认证接口实现统一登录。
+2.用SpringMVC+Hibernate实现系统后端逻辑。
+3.采用RBAC实现系统权限管理。
+4.后端代码采用Controller+Service+Dao的三层架构，项目代码清晰易维护。
+5.前端采用Ajax异步请求后端数据。
+</code></pre></li>
+</ul>
+<ul>
+<li><p>2017.02 - 2017.03 Gmail查询转发小工具(个人项目)</p>
+<pre><code>1.该项目主要出于学习的目的，在该项目中我学会使用JMS,Rabbitmq
+</code></pre></li>
+<li><p>多次帮助导师爬取各大网站数据,曾用Scrapy完成百万级数据爬虫并入库。</p>
+</li>
+</ul>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title></title>
+      <url>/2017/09/17/%E7%BD%91%E4%B8%8A%E6%8A%95/</url>
+      <content type="html"><![CDATA[<h2 id="个人简历"><a href="#个人简历" class="headerlink" title=" 个人简历"></a><center> 个人简历</center></h2><h4 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h4><ul>
+<li>袁子华/男/1993</li>
+<li>本科/上海大学计算机科学与技术</li>
+<li>技术博客：<a href="http://blog.foryung.com" target="_blank" rel="external">http://blog.foryung.com</a></li>
+<li>GitHub主页：<a href="https://github.com/yahaa" target="_blank" rel="external">https://github.com/yahaa</a></li>
+<li>期望职位：Java开发工程师</li>
+<li>期望城市：上海</li>
+<li>联系电话：18721808563</li>
+<li>Email：zihua@foryung.com</li>
+</ul>
+<h4 id="学习概况"><a href="#学习概况" class="headerlink" title="学习概况"></a>学习概况</h4><ul>
+<li>均绩点：3.25/4.0</li>
+<li>专业排名：前20%</li>
+<li>获奖情况：2015年国家励志奖学金，2016年CCPC编程大赛吉林大学赛区优胜奖</li>
+<li>证书：全国大学英语四级证书,2015年全球软件开发者志愿者证书</li>
+</ul>
+<h4 id="个人技能"><a href="#个人技能" class="headerlink" title="个人技能"></a>个人技能</h4><ul>
+<li>熟练使用Java,Python进行项目开发</li>
+<li>熟悉Springboot,SpringMVC,Spring,Hibernate，Flask等框架，对Spring源码有一定的了解</li>
+<li>熟练使用Docker,熟悉Kubernetes,能够熟练使用Docker API,K8S API进行二次开发</li>
+<li>熟悉Mongodb,MySQL，并能在项目中灵活的使用</li>
+<li>熟悉TCP/IP协议,Rabbitmq,WebSocket,Ngnix,熟练使用Linux系统</li>
+<li>熟悉HTML,CSS,Ajax,jQuery,Bootstrap</li>
+<li>有很好的项目管理经验,熟练使用Jenkins+Docker+Git进行项目的自动化部署</li>
+<li>有良好的数据结构功底和算法技能，是校ACM集训队成员</li>
+<li>有很好的组织能力，现任上海大学光伏蓝队队长</li>
+</ul>
+<h4 id="项目经历"><a href="#项目经历" class="headerlink" title="项目经历"></a>项目经历</h4><ul>
+<li>2017年7月至今，在DaoCloud实习，参与DaoCloud Enterprise(DCE)开发，主要负责方面有，DCE网络插件的设计，DCE引导启动，维护并修改旧代码中存在的Bug,以及DCE引入k8s Ingress的设计，Ngnix做反向代理负载均衡。</li>
+<li>2016年10月至今,担任上海大学光伏蓝队队长,带领团队完成上海大学光伏监控平台设计,主要负责方面有，系统后端业务逻辑的实现，串口编程采集逆变器及气象仪实时数据，前后端项目自动化部署。</li>
+<li>2017年6月,用Springboot模拟StackOverFlow实现新生问答系统。</li>
+<li>2017年5月,基于SpringMVC完成上海大学会议室借用系统，现已投入使用。</li>
+<li>2017年3月,用Spring,SprnigMVC,Hibernate独立完成课程设计“教务管理系统”(JavaEE 课程设计)。</li>
+<li>多次帮助导师爬取各大网站数据,曾用Scrapy完成百万级数据爬虫并入库。</li>
+</ul>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title></title>
+      <url>/2017/09/17/%E7%AE%80%E5%8E%86/</url>
+      <content type="html"><![CDATA[<h2 id="个人简历"><a href="#个人简历" class="headerlink" title=" 个人简历"></a><center> 个人简历</center></h2><h4 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h4><ul>
+<li>袁子华/男/1993</li>
+<li>本科/上海大学计算机科学与技术</li>
+<li>技术博客：<a href="http://blog.foryung.com" target="_blank" rel="external">http://blog.foryung.com</a></li>
+<li>GitHub主页：<a href="https://github.com/yahaa" target="_blank" rel="external">https://github.com/yahaa</a></li>
+<li>期望职位：Java开发工程师</li>
+<li>期望城市：上海</li>
+<li>联系电话：18721808563</li>
+<li>Email：zihua@foryung.com</li>
+</ul>
+<h4 id="学习概况"><a href="#学习概况" class="headerlink" title="学习概况"></a>学习概况</h4><ul>
+<li>均绩点：3.25/4.0</li>
+<li>专业排名：前20%</li>
+<li>获奖情况：2015年国家励志奖学金，2016年CCPC编程大赛吉林大学赛区优胜奖</li>
+<li>证书：全国大学英语四级证书,2015年全球软件开发者志愿者证书</li>
+</ul>
+<h4 id="个人技能"><a href="#个人技能" class="headerlink" title="个人技能"></a>个人技能</h4><ul>
+<li>熟练使用Java,Python进行项目开发</li>
+<li>熟悉Springboot,SpringMVC,Spring,Hibernate，Flask等框架，对Spring源码有一定的了解</li>
+<li>熟练使用Docker,熟悉Kubernetes,能够熟练使用Docker API,K8S API进行二次开发</li>
+<li>熟悉Mongodb,MySQL，并能在项目中灵活的使用</li>
+<li>熟悉TCP/IP协议,Rabbitmq,WebSocket,Ngnix,熟练使用Linux系统</li>
+<li>熟悉HTML,CSS,Ajax,jQuery,Bootstrap</li>
+<li>有很好的项目管理经验,熟练使用Jenkins+Docker+Git进行项目的自动化部署</li>
+<li>有良好的数据结构功底和算法技能，是校ACM集训队成员</li>
+<li>有很好的组织能力，现任上海大学光伏蓝队队长</li>
+<li>有很强的学习能力</li>
+</ul>
+<h4 id="项目经历"><a href="#项目经历" class="headerlink" title="项目经历"></a>项目经历</h4><ul>
+<li>2017.07 - 2017.09 DaoCloud Enterprise（DCE) ——容器平台研发工程师(实习)<pre><code>1.实习期间参与DCE开发后能够熟练使用docker，以及docker compose。
+2.熟悉k8s架构，并能熟练使用k8s API进行二次开发，在实习期间完成DCE集成Ingress设计。
+</code></pre></li>
+<li>2017.06 - 至今上海大学光伏监控系统Java后端开发<pre><code>1.用springboot框架实现，给前端提供Restful API。
+2.用Rabbitmq解决系统发送邮件监控系统核心业务解耦。
+3.用Websocket实现数据的实时监控。
+4.用Redis+Websocket实现联系管理员以及管理员可以查看当前在线客户。
+5.通过串口编程实现逆变器以及气象仪数据采集。
+6.自己实现JWT实现系统灵活的权限认证。
+7.用Jenkins+docker实现前后端项目自动化构建。
+8.用Nginx解决负载均衡。
+9.用Swagger-ui生成API文档。
+</code></pre></li>
+<li>2017.06 - 2017.06 上海大学会议室预约系统<pre><code>1.采用上海大学开放统一认证接口实现统一登录。
+2.用SpringMVC+Hibernate实现系统后端逻辑。
+3.采用RBAC实现系统权限管理。
+4.后端代码采用Controller+Service+Dao的三层架构，项目代码清晰易维护。
+4.前端采用Ajax异步请求后端数据。
+</code></pre></li>
+<li>2017.05 - 2017.06 上海大学新生问答系统<pre><code>1.用Spring+SpringMVC+Hibernate框架实现。
+2.界面模拟用bootstrap+jquery模拟stackoverflows。
+3.用Dockerfile打包成镜像，实现一次构建任意系统都可以运行。
+</code></pre></li>
+<li>2017.01 - 2017.02 教务管理系统(JavaEE课程项目)<pre><code>1.用Spring+SpringMVC+Hibernate框架实现。
+2.用RBAC实现权限管理。
+3..前端用bootstrap+jquery。
+</code></pre></li>
+<li>多次帮助导师爬取各大网站数据,曾用Scrapy完成百万级数据爬虫并入库。</li>
+</ul>
+<h3 id="主修课程"><a href="#主修课程" class="headerlink" title="主修课程"></a>主修课程</h3><ul>
+<li>算法与数据结构，离散数学,计算机网络，操作系统，系统结构，计算机组成原理，汇编，面向对象程序设计，数据库原理，软件工程</li>
+</ul>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title></title>
+      <url>/2017/09/17/%E6%89%93%E5%8D%B0%E7%89%88/</url>
+      <content type="html"><![CDATA[<h2 id="个人简历"><a href="#个人简历" class="headerlink" title=" 个人简历"></a><center> 个人简历</center></h2><h4 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h4><ul>
+<li>袁子华/男/1993</li>
+<li>本科/上海大学计算机科学与技术</li>
+<li>技术博客：<a href="http://blog.foryung.com" target="_blank" rel="external">http://blog.foryung.com</a></li>
+<li>GitHub主页：<a href="https://github.com/yahaa" target="_blank" rel="external">https://github.com/yahaa</a></li>
+<li>期望职位：Java开发工程师</li>
+<li>期望城市：上海</li>
+<li>联系电话：18721808563</li>
+<li>Email：zihua@foryung.com</li>
+</ul>
+<h4 id="学习概况"><a href="#学习概况" class="headerlink" title="学习概况"></a>学习概况</h4><ul>
+<li>均绩点：3.25/4.0</li>
+<li>专业排名：前20%</li>
+<li>获奖情况：2015年国家励志奖学金，2016年CCPC编程大赛吉林大学赛区优胜奖</li>
+<li>证书：全国大学英语四级证书,2015年全球软件开发者志愿者证书</li>
+</ul>
+<h4 id="个人技能"><a href="#个人技能" class="headerlink" title="个人技能"></a>个人技能</h4><ul>
+<li>熟练使用Java,Python进行项目开发</li>
+<li>熟悉Springboot,SpringMVC,Spring,Hibernate，Flask等框架，对Spring源码有一定的了解</li>
+<li>熟练使用Docker,熟悉Kubernetes,能够熟练使用Docker API,K8S API进行二次开发</li>
+<li>熟悉Mongodb,MySQL，并能在项目中灵活的使用</li>
+<li>熟悉TCP/IP协议,Rabbitmq,WebSocket,Ngnix,熟练使用Linux系统</li>
+<li>熟悉HTML,CSS,Ajax,jQuery,Bootstrap</li>
+<li>有很好的项目管理经验,熟练使用Jenkins+Docker+Git进行项目的自动化部署</li>
+<li>有良好的数据结构功底和算法技能，是校ACM集训队成员</li>
+<li>有很好的组织能力，现任上海大学光伏蓝队队长</li>
+<li>有很强的学习能力</li>
+</ul>
+<h4 id="项目经历"><a href="#项目经历" class="headerlink" title="项目经历"></a>项目经历</h4><ul>
+<li>2017.07 - 2017.09 DaoCloud Enterprise（DCE) ——容器平台研发工程师(实习)<pre><code>1.实习期间参与DCE开发后能够熟练使用docker，以及docker compose。
+2.熟悉k8s架构，并能熟练使用k8s API进行二次开发，在实习期间完成DCE集成Ingress设计。
+</code></pre></li>
+<li>2017.06 - 至今上海大学光伏监控系统Java后端开发<pre><code>1.用springboot框架实现，给前端提供Restful API。
+2.用Rabbitmq解决系统发送邮件监控系统核心业务解耦。
+3.用Websocket实现数据的实时监控。
+4.用Redis+Websocket实现联系管理员以及管理员可以查看当前在线客户。
+5.通过串口编程实现逆变器以及气象仪数据采集。
+6.自己实现JWT实现系统灵活的权限认证。
+7.用Jenkins+docker实现前后端项目自动化构建。
+8.用Nginx解决负载均衡。
+9.用Swagger-ui生成API文档。
+</code></pre></li>
+<li>2017.06 - 2017.06 上海大学会议室预约系统<pre><code>1.采用上海大学开放统一认证接口实现统一登录。
+2.用SpringMVC+Hibernate实现系统后端逻辑。
+3.采用RBAC实现系统权限管理。
+4.后端代码采用Controller+Service+Dao的三层架构，项目代码清晰易维护。
+4.前端采用Ajax异步请求后端数据。
+</code></pre></li>
+<li>2017.05 - 2017.06 上海大学新生问答系统<pre><code>1.用Spring+SpringMVC+Hibernate框架实现。
+2.界面模拟用bootstrap+jquery模拟stackoverflows。
+3.用Dockerfile打包成镜像，实现一次构建任意系统都可以运行。
+</code></pre></li>
+<li>2017.01 - 2017.02 教务管理系统(JavaEE课程项目)<pre><code>1.用Spring+SpringMVC+Hibernate框架实现。
+2.用RBAC实现权限管理。
+3..前端用bootstrap+jquery。
+</code></pre></li>
+<li>多次帮助导师爬取各大网站数据,曾用Scrapy完成百万级数据爬虫并入库。</li>
+</ul>
+<h3 id="主修课程"><a href="#主修课程" class="headerlink" title="主修课程"></a>主修课程</h3><ul>
+<li>算法与数据结构，离散数学,计算机网络，操作系统，系统结构，计算机组成原理，汇编，面向对象程序设计，数据库原理，软件工程，Oracle数据库,组合数学，离散数学。</li>
+</ul>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[股市投资课程]]></title>
+      <url>/2017/09/13/%E8%82%A1%E5%B8%82%E6%8A%95%E8%B5%84%E8%AF%BE%E7%A8%8B/</url>
+      <content type="html"><![CDATA[<h3 id="考核"><a href="#考核" class="headerlink" title="考核"></a>考核</h3><ul>
+<li>模拟炒股()</li>
+<li>课程论文(姓名学号为用户名)</li>
+<li>模拟炒股比赛</li>
+<li>链接lab.10jqka.com.cn/login/index</li>
+<li>公邮 yu56785678@126.com 密码 yu12345678</li>
+<li>课程论文 yujiujiu999@126.com</li>
+</ul>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> 课程 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[fluent使用入门]]></title>
+      <url>/2017/09/04/fluent%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8/</url>
+      <content type="html"><![CDATA[<h3 id="docker-运行"><a href="#docker-运行" class="headerlink" title="docker 运行"></a>docker 运行</h3><ul>
+<li><p>docker run -d   -p 9880:9880 -v /home/zihua/test:/fluentd/etc -e FLUENTD_CONF=fluentd.conf   fluent/fluentd</p>
+</li>
+<li><p>curl -X POST -d ‘json={“json”:”message”}’ <a href="http://localhost:9880/sample.test" target="_blank" rel="external">http://localhost:9880/sample.test</a><br>点击更多可以编辑7层负载均衡<br>上两页中的</p>
+</li>
+</ul>
+<p>编辑不能修改7层负载均衡名称<br>用到”更新Ingress” API<br>添加</p>
+<p>域名只能填一个<br>路径也只能填一个<br>选择器默认加载当前应用的第一个服务<br>端口默认是80<br>应用界面<br>高级设置<br>选择器和端口默认<br>绿色字段为由选择器和端口默认创建的Server<br>高级设置字段<br>默认名字<br>名称默认为:应用名_ingress</p>
+<p>默认创建的Server 名字规则为 ingress名字-ingress-default-server<br>值和Server名字相同</p>
+<p>默认名字规则为：应用名-ingress-default-server<br>应用名-镜像名</p>
+<p>requirements = [‘wget’, ‘git’, ‘net-tools’, ‘bind-utils’, ‘iptables-services’, ‘bridge-utils’, ‘bash-completion’,<br>                    ‘kexec-tools’, ‘sos’, ‘psacct’, ‘chrony’, ‘device-mapper-persistent-data’, ‘lvm2’, ‘audit’,<br>                    ‘systemd-journal’, ‘socat’, ‘ipvsadm’]<br>RUN yum install -y –setopt=obsoletes=0 wget git net-tools bind-utils iptables-services bridge-utils bash-completion kexec-tools sos psacct ntp chrony device-mapper-persistent-data lvm2 audit systemd-journal socat yum-utils  telnet tcpdump keepalived ipvsadm –downloadonly –downloaddir=/app/repo/packages</p>
+<p>requirements = [‘apt-transport-https’, ‘ca-certificates’, ‘lsb-release’, ‘software-properties-common’, ‘ntp’,’ipvsadm’]<br>RUN apt-get update  &amp;&amp; \<br>    apt-get install -y curl apt-transport-https ca-certificates lsb-release software-properties-common ntp keepalived ipvsadm</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> fluent </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[docker远程调用笔记]]></title>
       <url>/2017/08/31/docker%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E7%AC%94%E8%AE%B0/</url>
       <content type="html"><![CDATA[<p>实习这一段时间一直做的是有关docker方面的开发，公司代码测试非常困难</p>
@@ -168,7 +539,7 @@
 </code></pre><ul>
 <li>更新已有 ingress的局部信息 API 调用示例(把host改为 www.for.com)</li>
 </ul>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">      请求：</div><div class="line"></div><div class="line">      curl --request PATCH -H 'Content-Type: application/strategic-merge-patch+json' --data '</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"metadata"</span>: &#123;</div><div class="line">          <span class="attr">"name"</span>:<span class="string">"test"</span></div><div class="line">          &#125;,</div><div class="line">          <span class="attr">"spec"</span>: &#123;</div><div class="line">            <span class="attr">"rules"</span>: [</div><div class="line">              &#123;</div><div class="line">                <span class="attr">"host"</span>: <span class="string">"www.for.com"</span>,</div><div class="line">                <span class="attr">"http"</span>: &#123;</div><div class="line">                  <span class="attr">"paths"</span>: [</div><div class="line">                    &#123;</div><div class="line">                      <span class="attr">"path"</span>: <span class="string">"/fooo"</span>,</div><div class="line">                      <span class="attr">"backend"</span>: &#123;</div><div class="line">                        <span class="attr">"serviceName"</span>: <span class="string">"kubernetes-dashboard"</span>,</div><div class="line">                        <span class="attr">"servicePort"</span>: <span class="number">19090</span></div><div class="line">                      &#125;</div><div class="line">                    &#125;</div><div class="line">                  ]</div><div class="line">                &#125;</div><div class="line">              &#125;</div><div class="line">            ]</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">      ' http://127.0.0.1:18081/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test</div><div class="line"></div><div class="line"></div><div class="line">      返回：</div><div class="line"></div><div class="line">      &#123;</div><div class="line">        <span class="attr">"kind"</span>: <span class="string">"Ingress"</span>,</div><div class="line">        <span class="attr">"apiVersion"</span>: <span class="string">"extensions/v1beta1"</span>,</div><div class="line">        <span class="attr">"metadata"</span>: &#123;</div><div class="line">          <span class="attr">"name"</span>: <span class="string">"test"</span>,</div><div class="line">          <span class="attr">"namespace"</span>: <span class="string">"kube-system"</span>,</div><div class="line">          <span class="attr">"selfLink"</span>: <span class="string">"/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test"</span>,</div><div class="line">          <span class="attr">"uid"</span>: <span class="string">"ebc3e999-87d7-11e7-9381-0242ac130006"</span>,</div><div class="line">          <span class="attr">"resourceVersion"</span>: <span class="string">"145533"</span>,</div><div class="line">          <span class="attr">"generation"</span>: <span class="number">4</span>,</div><div class="line">          <span class="attr">"creationTimestamp"</span>: <span class="string">"2017-08-23T07:51:50Z"</span></div><div class="line">        &#125;,</div><div class="line">        <span class="attr">"spec"</span>: &#123;</div><div class="line">          <span class="attr">"rules"</span>: [</div><div class="line">            &#123;</div><div class="line">              <span class="attr">"host"</span>: <span class="string">"www.for.com"</span>,</div><div class="line">              <span class="attr">"http"</span>: &#123;</div><div class="line">                <span class="attr">"paths"</span>: [</div><div class="line">                  &#123;</div><div class="line">                    <span class="attr">"path"</span>: <span class="string">"/fooo"</span>,</div><div class="line">                    <span class="attr">"backend"</span>: &#123;</div><div class="line">                      <span class="attr">"serviceName"</span>: <span class="string">"kubernetes-dashboard"</span>,</div><div class="line">                      <span class="attr">"servicePort"</span>: <span class="number">19090</span></div><div class="line">                    &#125;</div><div class="line">                  &#125;</div><div class="line">                ]</div><div class="line">              &#125;</div><div class="line">            &#125;</div><div class="line">          ]</div><div class="line">        &#125;,</div><div class="line">        <span class="attr">"status"</span>: &#123;</div><div class="line">          <span class="attr">"loadBalancer"</span>: &#123;</div><div class="line">            <span class="attr">"ingress"</span>: [</div><div class="line">              &#123;</div><div class="line">                <span class="attr">"ip"</span>: <span class="string">"192.168.2.80"</span></div><div class="line">              &#125;</div><div class="line">            ]</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">      请求：</div><div class="line"></div><div class="line">        curl --request PATCH -H 'Content-Type: application/strategic-merge-patch+json' --data '</div><div class="line">        &#123;</div><div class="line">          <span class="attr">"metadata"</span>: &#123;</div><div class="line">            <span class="attr">"name"</span>:<span class="string">"test2"</span></div><div class="line">            &#125;,</div><div class="line">            <span class="attr">"spec"</span>: &#123;</div><div class="line">              <span class="attr">"rules"</span>: [</div><div class="line">                &#123;</div><div class="line">                  <span class="attr">"host"</span>: <span class="string">"www.for.com"</span>,</div><div class="line">                  <span class="attr">"http"</span>: &#123;</div><div class="line">                    <span class="attr">"paths"</span>: [</div><div class="line">                      &#123;</div><div class="line">                        <span class="attr">"path"</span>: <span class="string">"/foooasdf"</span>,</div><div class="line">                        <span class="attr">"backend"</span>: &#123;</div><div class="line">                          <span class="attr">"serviceName"</span>: <span class="string">"kubernetes-dashboard"</span>,</div><div class="line">                          <span class="attr">"servicePort"</span>: <span class="number">19090</span></div><div class="line">                        &#125;</div><div class="line">                      &#125;</div><div class="line">                    ]</div><div class="line">                  &#125;</div><div class="line">                &#125;</div><div class="line">              ]</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">        ' http://127.0.0.1:18081/apis/extensions/v1beta1/namespaces/default/ingresses/test2</div><div class="line"></div><div class="line"></div><div class="line">      返回：</div><div class="line"></div><div class="line">      &#123;</div><div class="line">        <span class="attr">"kind"</span>: <span class="string">"Ingress"</span>,</div><div class="line">        <span class="attr">"apiVersion"</span>: <span class="string">"extensions/v1beta1"</span>,</div><div class="line">        <span class="attr">"metadata"</span>: &#123;</div><div class="line">          <span class="attr">"name"</span>: <span class="string">"test"</span>,</div><div class="line">          <span class="attr">"namespace"</span>: <span class="string">"kube-system"</span>,</div><div class="line">          <span class="attr">"selfLink"</span>: <span class="string">"/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test"</span>,</div><div class="line">          <span class="attr">"uid"</span>: <span class="string">"ebc3e999-87d7-11e7-9381-0242ac130006"</span>,</div><div class="line">          <span class="attr">"resourceVersion"</span>: <span class="string">"145533"</span>,</div><div class="line">          <span class="attr">"generation"</span>: <span class="number">4</span>,</div><div class="line">          <span class="attr">"creationTimestamp"</span>: <span class="string">"2017-08-23T07:51:50Z"</span></div><div class="line">        &#125;,</div><div class="line">        <span class="attr">"spec"</span>: &#123;</div><div class="line">          <span class="attr">"rules"</span>: [</div><div class="line">            &#123;</div><div class="line">              <span class="attr">"host"</span>: <span class="string">"www.for.com"</span>,</div><div class="line">              <span class="attr">"http"</span>: &#123;</div><div class="line">                <span class="attr">"paths"</span>: [</div><div class="line">                  &#123;</div><div class="line">                    <span class="attr">"path"</span>: <span class="string">"/fooo"</span>,</div><div class="line">                    <span class="attr">"backend"</span>: &#123;</div><div class="line">                      <span class="attr">"serviceName"</span>: <span class="string">"kubernetes-dashboard"</span>,</div><div class="line">                      <span class="attr">"servicePort"</span>: <span class="number">19090</span></div><div class="line">                    &#125;</div><div class="line">                  &#125;</div><div class="line">                ]</div><div class="line">              &#125;</div><div class="line">            &#125;</div><div class="line">          ]</div><div class="line">        &#125;,</div><div class="line">        <span class="attr">"status"</span>: &#123;</div><div class="line">          <span class="attr">"loadBalancer"</span>: &#123;</div><div class="line">            <span class="attr">"ingress"</span>: [</div><div class="line">              &#123;</div><div class="line">                <span class="attr">"ip"</span>: <span class="string">"192.168.2.80"</span></div><div class="line">              &#125;</div><div class="line">            ]</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <ul>
 <li>替换 已有 ingress API</li>
 </ul>
@@ -452,8 +823,14 @@ SSL_CERT_FILE=/home/zihua/DaoCloud/dce-deployer/certs/https/dce.crt
 
 
 db.createUser(
-</code></pre><p>  {<br>    user: “yahaa”,<br>    pwd: “Asd123321”,<br>    roles: [ { role: “readWrite”, db: “chatapi” },<br>             { role: “readWrite”, db: “chatapi-log” } ]<br>  }<br>)</p>
-<ul>
+  {
+    user: &quot;yahaa&quot;,
+    pwd: &quot;Asd123321&quot;,
+    roles: [ { role: &quot;readWrite&quot;, db: &quot;chatapi&quot; },
+             { role: &quot;readWrite&quot;, db: &quot;chatapi-log&quot; } ]
+  }
+)
+</code></pre><ul>
 <li>详情参考下面博文<h4 id="docker-中mongodb-授权"><a href="#docker-中mongodb-授权" class="headerlink" title="docker 中mongodb 授权"></a>docker 中mongodb 授权</h4></li>
 <li><a href="https://blog.igevin.info/posts/docker-mongo-auth/" target="_blank" rel="external">参考博客</a></li>
 </ul>

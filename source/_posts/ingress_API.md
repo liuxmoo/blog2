@@ -85,31 +85,31 @@ toc: true
 
       请求：
 
-      curl --request PATCH -H 'Content-Type: application/strategic-merge-patch+json' --data '
-      {
-        "metadata": {
-          "name":"test"
-          },
-          "spec": {
-            "rules": [
-              {
-                "host": "www.for.com",
-                "http": {
-                  "paths": [
-                    {
-                      "path": "/fooo",
-                      "backend": {
-                        "serviceName": "kubernetes-dashboard",
-                        "servicePort": 19090
+        curl --request PATCH -H 'Content-Type: application/strategic-merge-patch+json' --data '
+        {
+          "metadata": {
+            "name":"test2"
+            },
+            "spec": {
+              "rules": [
+                {
+                  "host": "www.for.com",
+                  "http": {
+                    "paths": [
+                      {
+                        "path": "/foooasdf",
+                        "backend": {
+                          "serviceName": "kubernetes-dashboard",
+                          "servicePort": 19090
+                        }
                       }
-                    }
-                  ]
+                    ]
+                  }
                 }
-              }
-            ]
+              ]
+        }
       }
-    }
-      ' http://127.0.0.1:18081/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test
+        ' http://127.0.0.1:18081/apis/extensions/v1beta1/namespaces/default/ingresses/test2
 
 
       返回：

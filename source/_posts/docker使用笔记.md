@@ -44,13 +44,13 @@ toc: true
 
 
     db.createUser(
-  {
-    user: "yahaa",
-    pwd: "Asd123321",
-    roles: [ { role: "readWrite", db: "chatapi" },
-             { role: "readWrite", db: "chatapi-log" } ]
-  }
-)
+      {
+        user: "yahaa",
+        pwd: "Asd123321",
+        roles: [ { role: "readWrite", db: "chatapi" },
+                 { role: "readWrite", db: "chatapi-log" } ]
+      }
+    )
 
 * 详情参考下面博文
 #### docker 中mongodb 授权
