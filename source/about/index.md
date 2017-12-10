@@ -1,38 +1,7 @@
 ---
-title:
+title: 关于我
 date: 2017-08-23 23:23:59
 ---
 
-# <center>Let's code
-
-###### <center> 上海大学光伏蓝队招募
-
-### 指导老师:
-* 朱文浩 （硕士生导师）
-
-### 宗旨:
-* 学习为主，吹牛为辅
-
-### 技术方向:
-* Java，Springboot开发
-* Vue.js 开发
-* Python 网络爬虫
-* Docker 等一切好玩的东西！
-
-### 加入要求:
-* 热爱学习，善于学习发现新技术
-* 热爱编程
-* 责任心强，有一定的强迫症！
-
-### 面向对象：
-* 上海大学大一升大二，大二升大三全体学生
-
-
-### 详询：
-* 邮箱 zihuayuan68@qq.com
-* 手机 18721808563
-* QQ 1477765176
-* http://shucloud.shu.edu.cn/join_us
-
-### Github主页：
-* http://github.com/SHU-PV-Blue
+* 菜鸟一枚，但热爱docker。
+* 会写Python，Go，Java。

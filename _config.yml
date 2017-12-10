@@ -3,11 +3,11 @@
 ## Source:          https://github.com/hexojs/hexo/
 
 # Site
-title:              Foryung
-subtitle:           写点东西吧，时间会遗忘一切！
+title:              for
+subtitle:           Just go to do what you want to do.
 description:        想成为一本书，一本能够被读懂的书！
 author:             zihua
-language:           zh-CN
+language:           zh-cn
 timezone:           Asia/Shanghai
 
 # URL
@@ -72,7 +72,7 @@ pagination_dir:     page
 # Extensions
 ## Plugins:         https://hexo.io/plugins/
 ## Themes:          https://hexo.io/themes/
-theme:              maupassant
+theme:              jsimple
 
 # Deployment
 ## Docs:            https://hexo.io/docs/deployment.html
