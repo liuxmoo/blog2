@@ -3,8 +3,8 @@
   
     
     <entry>
-      <title><![CDATA[Dockerfile]]></title>
-      <url>/2017/12/10/Dockerfile/</url>
+      <title><![CDATA[Docker使用总结]]></title>
+      <url>/2017/12/10/Docker%E6%80%BB%E7%BB%93/</url>
       <content type="html"><![CDATA[<blockquote>
 <p>好久没写博客了，去七牛实习了一个月，写了快一个月的Dockerfile,我个人是docker的脑残粉，现在的情况是，不管什么东西我都会想着docker化，所以想结合自己这一段时间的使用做一次总结吧。</p>
 </blockquote>
@@ -109,21 +109,6 @@ source .bashrc
         <tags>
             
             <tag> fluent </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[docker远程调用笔记]]></title>
-      <url>/2017/08/31/docker%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E7%AC%94%E8%AE%B0/</url>
-      <content type="html"><![CDATA[<p>实习这一段时间一直做的是有关docker方面的开发，公司代码测试非常困难</p>
-]]></content>
-      
-        
-        <tags>
-            
-            <tag> docker </tag>
             
         </tags>
         
