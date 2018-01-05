@@ -4,6 +4,8 @@ date: 2017-09-04 10:23:32
 tags: fluent
 description: fluent 使用笔记
 toc: ture
+author: zihua
+avatar: /images/me.jpeg
 ---
 
 ### docker 运行

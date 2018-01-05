@@ -4,6 +4,8 @@ date: 2017-03-22 23:22:55
 tags: chrome
 description: 学着开发自己的chrome插件
 toc: true
+author: zihua
+avatar: /images/me.jpeg
 ---
 
 ---

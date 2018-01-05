@@ -4,6 +4,8 @@ date: 2017-03-18 21:57:54
 tags: Markdown
 description: markdown 语法入门
 toc: true
+author: zihua
+avatar: /images/me.jpeg
 ---
 
 

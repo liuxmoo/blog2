@@ -4,6 +4,8 @@ date: 2017-06-26 00:37:08
 tags: mongodb
 description: mongodb 使用的一些笔记
 toc: true
+author: zihua
+avatar: /images/me.jpeg
 ---
 
 ### Mongodb修改为密码登录

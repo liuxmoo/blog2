@@ -3,6 +3,8 @@ title: ufw使用笔记
 date: 2017-08-26 21:13:08
 tags: linux
 description: ubuntu 折腾记
+author: zihua
+avatar: /images/me.jpeg
 ---
 
 最近在使用学校的云服务器，真心烦，各种端口限制，不过还好，在被限制的情况下逼迫自己学会使用nginx做反向代理，同时会用ufw。

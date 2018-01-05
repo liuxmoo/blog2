@@ -2,8 +2,10 @@
 title: "Ingress Controller"
 date: 2017-08-23T14:41:12+08:00
 tags: k8s
-description: daocloud实习维护的模块
+description: Ingress Controller使用
 toc: true
+author: zihua
+avatar: /images/me.jpeg
 ---
 
 

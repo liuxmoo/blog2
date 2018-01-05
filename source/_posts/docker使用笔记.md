@@ -4,6 +4,8 @@ date: 2017-06-29 21:06:05
 tags: docker
 description: 关于docker 使用的一些记录
 toc: true
+author: zihua
+avatar: /images/me.jpeg
 ---
 
 

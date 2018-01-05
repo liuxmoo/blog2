@@ -4,6 +4,8 @@ date: 2017-08-23T15:55:33+08:00
 tags: k8s
 description: Ingress
 toc: true
+author: zihua
+avatar: /images/me.jpeg
 ---
 
 

@@ -4,6 +4,8 @@ date: 2017-08-17T23:12:44+08:00
 tags: hugo
 description: 这是实习系统会卡圣诞节疯狂了
 toc: true
+author: zihua
+avatar: /images/me.jpeg
 ---
 
 

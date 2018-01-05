@@ -5,6 +5,7 @@ tags: 实习
 description: DaoCloud 实习笔记
 toc: true
 author: zihua
+avatar: /images/me.jpeg
 ---
 
 

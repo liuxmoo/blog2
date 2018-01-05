@@ -2,6 +2,8 @@
 title: '关于http,https流量转socks5流量的一些笔记'
 date: 2017-10-28 16:12:58
 tags: network
+author: zihua
+avatar: /images/me.jpeg
 ---
 
 ### 前言

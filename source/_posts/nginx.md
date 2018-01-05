@@ -4,6 +4,8 @@ date: 2017-08-17T23:12:44+08:00
 tags: nginx
 description: nginx使用的一些笔记
 toc: true
+author: zihua
+avatar: /images/me.jpeg
 ---
 
 ### nginx 使用笔记

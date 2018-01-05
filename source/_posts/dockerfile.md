@@ -4,6 +4,8 @@ date: 2017-12-10 21:22:05
 tags: docker
 description: Dockerfile使用总结
 toc: true
+author: zihua
+avatar: /images/me.jpeg
 ---
 > 好久没写博客了，去七牛实习了一个月，写了快一个月的Dockerfile,我个人是docker的脑残粉，现在的情况是，不管什么东西我都会想着docker化，所以想结合自己这一段时间的使用做一次总结吧。
 
