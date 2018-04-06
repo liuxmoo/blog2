@@ -5,5 +5,3 @@ if docker inspect blog 2>&1 > /dev/null; then
 fi
 
 docker run -d -p 9008:80 --name blog yzihua/blog
-
-
