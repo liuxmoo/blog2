@@ -1,12 +1,19 @@
 ---
-title: "nginx 使用笔记"
+title: "nginx 入门"
 date: 2017-08-17T23:12:44+08:00
 tags: nginx
-description: nginx使用的一些笔记
+description: 
 toc: true
 author: zihua
+categories: "nginx"
 avatar: /images/me.jpeg
 ---
+
+> 菜鸟入门 nginx
+
+![nginx](http://p1teq0wgy.bkt.clouddn.com/nginx.gif)
+
+<!--more-->
 
 ### nginx 使用笔记
 #### 安装 (ubuntu)

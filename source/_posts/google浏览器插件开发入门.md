@@ -1,14 +1,15 @@
 ---
-title: 英语学习小工具
+title: chrome 插件开发
 date: 2017-03-22 23:22:55
 tags: chrome
-description: 学着开发自己的chrome插件
 toc: true
 author: zihua
+categories: "乱搞"
 avatar: /images/me.jpeg
 ---
+> 基于划词翻译插件实现的生词本。
 
----
+![chrome](http://p1teq0wgy.bkt.clouddn.com/chrome.jpg)
 <!-- more -->
 
 英语学习小工具

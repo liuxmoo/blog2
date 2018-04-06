@@ -3,16 +3,16 @@
 ## Source:          https://github.com/hexojs/hexo/
 
 # Site
-title:              for
-subtitle:           Just go to do what you want to do.
-description:        想成为一本书，一本能够被读懂的书！
+title:              Gofoer
+subtitle:           Something new,something interesting.
+description:        Something new,something interesting.
 author:             zihua
-language:           zh-cn
+language:           zh-Hans
 timezone:           Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url:                http://foryung.com
+url:                http://blog.foryung.com
 root:               /
 permalink:          :year/:month/:day/:title/
 permalink_defaults:
@@ -72,7 +72,7 @@ pagination_dir:     page
 # Extensions
 ## Plugins:         https://hexo.io/plugins/
 ## Themes:          https://hexo.io/themes/
-theme:              jsimple
+theme:              next
 
 # Deployment
 ## Docs:            https://hexo.io/docs/deployment.html

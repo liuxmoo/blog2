@@ -2,13 +2,17 @@
 title: Ubuntu16.04 软件源
 date: 2017-08-24 16:06:37
 tags: Linux
-description: ubuntu16.04软件源配置
 toc: true
 author: zihua
+categories: "linux"
 avatar: /images/me.jpeg
 ---
 
-之前一直用ubuntu14.04,那时安装软件基本没什么问题，但是到了ubuntu16.04各种问题都出现了，比如通过deb包安装搜狗输入法，docker等时依赖无法下载，经过一番折腾，发现是软件源不正常导致，所以想把这一折腾结构记录一下以免下次自己又得去折腾。
+> 之前一直用ubuntu14.04,那时安装软件基本没什么问题，但是到了ubuntu16.04各种问题都出现了，比如通过deb包安装搜狗输入法，docker等时依赖无法下载，经过一番折腾，发现是软件源不正常导致，所以想把这一折腾结构记录一下以免下次自己又得去折腾。
+
+![ubuntu](http://p1teq0wgy.bkt.clouddn.com/ubuntu.png)
+
+<!--more-->
 
 ### 配置
 * sudo cp /etc/apt/source.list /etc/apt/backup_source.list 备份

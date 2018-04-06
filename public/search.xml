@@ -3,15 +3,27 @@
   
     
     <entry>
-      <title><![CDATA[Docker使用总结]]></title>
-      <url>/2017/12/10/Docker%E6%80%BB%E7%BB%93/</url>
+      <title><![CDATA[Docker 容器主机磁盘耗尽的问题的解决方案]]></title>
+      <url>/2017/12/10/Docker_log/</url>
       <content type="html"><![CDATA[<blockquote>
-<p>写Dockerfile命令时千万要记住，你在写dockerfile不是在写linux命令,所以一般我们在Dockerfile中建议把多条命令合在一起，这样防止最后生成的镜像过于庞大。</p>
-<p>docker中的每一个容器的本质是Linux上的一个进程，所以不要把docker当做虚拟机使用</p>
-<p>之前在Daocloud实习，我一直非常困惑DCE(Daocloud的一款产品)是如何做到在容器中控制宿主机上的docker,一段时间的研究发现通过挂载 unix:///var/run/docker.sock 到容器中，就可以实现容器中控制宿主机上的docker</p>
+<p>docker 有毒，你看又把服务器磁盘快耗尽了。。。<br><img src="http://p1teq0wgy.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-04-06%20%E4%B8%8B%E5%8D%889.18.02.png" alt="iterm"></p>
+</blockquote>
+<a id="more"></a>
+<h4 id="docker-log-真确的使用姿势"><a href="#docker-log-真确的使用姿势" class="headerlink" title="docker log 真确的使用姿势"></a>docker log 真确的使用姿势</h4><blockquote>
+<p>docker log 支持的驱动请看 <a href="https://docs.docker.com/config/containers/logging/configure/#supported-logging-drivers" target="_blank" rel="noopener">docker log driver</a>。<br>docker 默认的日志驱动是 json-file,所以上面这条命令会收集容器的终端输出保留最新的日志，保留三份，每份50M。这点和 supervisor 滚动保存日志的方式是一致的。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 27017:27017 --<span class="built_in">log</span>-opt max-file=3 --<span class="built_in">log</span>-opt max-size=50M mongo</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>自己有毒。。。<br><img src="http://p1teq0wgy.bkt.clouddn.com/docker.jpg?imageMogr2/thumbnail/!50p" alt="docker"></p>
 </blockquote>
 ]]></content>
       
+        <categories>
+            
+            <category> docker </category>
+            
+        </categories>
+        
         
         <tags>
             
@@ -22,10 +34,17 @@
     </entry>
     
     <entry>
-      <title><![CDATA[关于http,https流量转socks5流量的一些笔记]]></title>
+      <title><![CDATA[WOC go get 这么慢]]></title>
       <url>/2017/10/28/%E5%85%B3%E4%BA%8Ehttp-https%E6%B5%81%E9%87%8F%E8%BD%ACsocks5%E6%B5%81%E9%87%8F%E7%9A%84%E4%B8%80%E4%BA%9B%E7%AC%94%E8%AE%B0/</url>
-      <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在linux（ubuntu）上使用过ssr的同学都知道，ssr使用的是socks5协议，并且在本地默认监听的是1080端口，我们需要在浏览器中使用 SwitchyOmega 插件才能正常FQ，那么问题来了，我们平时在命令行下使用wget，go get,mvn等走的都是http/https，所以我们是无法直接使用127.0.0.1:1080做代理的。怎么办？我们需要把http/https流量转发都1080端口即可</p>
-<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><ul>
+      <content type="html"><![CDATA[<blockquote>
+<p>好烦啊，go get 拉一个第三方依赖要这么长时间，还让不让人好好的写代码了。</p>
+</blockquote>
+<p><img src="http://p1teq0wgy.bkt.clouddn.com/1_v8aqa9ANpmb0CmWUXw7AkQ.png" alt="slowly"></p>
+<a id="more"></a>
+<h3 id="写在前面的话"><a href="#写在前面的话" class="headerlink" title="写在前面的话"></a>写在前面的话</h3><blockquote>
+<p>在linux（ubuntu）上使用过ssr的同学都知道，ssr使用的是socks5协议，并且在本地默认监听的是1080端口，我们需要在浏览器中使用 SwitchyOmega 插件才能正常FQ，那么问题来了，我们平时在命令行下使用wget，go get,mvn等走的都是http/https，所以我们是无法直接使用127.0.0.1:1080做代理的。怎么办？我们需要把http/https流量转发都1080端口即可</p>
+</blockquote>
+<h4 id="1-Ubuntu16-04-下的解决方案"><a href="#1-Ubuntu16-04-下的解决方案" class="headerlink" title="1.Ubuntu16.04 下的解决方案"></a>1.Ubuntu16.04 下的解决方案</h4><ul>
 <li><p>安装polipo</p>
 <pre><code>sudo apt-get install polipo
 </code></pre></li>
@@ -53,11 +72,14 @@ curl ifconfig.me
 
 //稍等片刻可以看到终端显示代理服务器ip地址
 </code></pre></li>
-<li><p>完成上面步骤那么我们就可以通过 127.0.0.1:8118把http/https流量转发到127.0.0.1:1080端口的socks5上了</p>
-</li>
 </ul>
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>上面的记录主要是我在使用go get命令下载三方依赖的时候老是被xxxxx,那么完成了上面步骤，我就可以通过走8118端口用go get 下载到我需要的依赖了，我怎么做？看下面步骤……</p>
-<h3 id="给go-get-命令走socks5下载到我想要的东西"><a href="#给go-get-命令走socks5下载到我想要的东西" class="headerlink" title="给go get 命令走socks5下载到我想要的东西"></a>给go get 命令走socks5下载到我想要的东西</h3><ul>
+<blockquote>
+<p>完成上面步骤那么我们就可以通过 127.0.0.1:8118把http/https流量转发到127.0.0.1:1080端口的socks5上了</p>
+</blockquote>
+<h4 id="2-测试是否成功"><a href="#2-测试是否成功" class="headerlink" title="2.测试是否成功"></a>2.测试是否成功</h4><blockquote>
+<p>上面的记录主要是我在使用go get命令下载三方依赖的时候老是被xxxxx,那么完成了上面步骤，我就可以通过走8118端口用go get 下载到我需要的依赖了，我怎么做？看下面步骤……</p>
+</blockquote>
+<h4 id="3-给-go-get-命令走-socks5"><a href="#3-给-go-get-命令走-socks5" class="headerlink" title="3.给 go get 命令走 socks5"></a>3.给 go get 命令走 socks5</h4><ul>
 <li><p>修改环境变量</p>
 <pre><code>vim .bashrc
 //在后面追加下面配置
@@ -70,8 +92,14 @@ source .bashrc
 <pre><code>goo get &lt;xxxxxxxxxx&gt;      //
 </code></pre></li>
 </ul>
-<h6 id="以上纯属个人笔记，难免有不当之处"><a href="#以上纯属个人笔记，难免有不当之处" class="headerlink" title="以上纯属个人笔记，难免有不当之处"></a>以上纯属个人笔记，难免有不当之处</h6>]]></content>
+]]></content>
       
+        <categories>
+            
+            <category> network </category>
+            
+        </categories>
+        
         
         <tags>
             
@@ -82,22 +110,38 @@ source .bashrc
     </entry>
     
     <entry>
-      <title><![CDATA[fluent使用入门]]></title>
-      <url>/2017/09/04/fluent%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8/</url>
-      <content type="html"><![CDATA[<h3 id="docker-运行"><a href="#docker-运行" class="headerlink" title="docker 运行"></a>docker 运行</h3><ul>
-<li><p>docker run -d   -p 9880:9880 -v /home/zihua/test:/fluentd/etc -e FLUENTD_CONF=fluentd.conf   fluent/fluentd</p>
-</li>
-<li><p>curl -X POST -d ‘json={“json”:”message”}’ <a href="http://localhost:9880/sample.test" target="_blank" rel="noopener">http://localhost:9880/sample.test</a><br>点击更多可以编辑7层负载均衡<br>上两页中的</p>
-</li>
-</ul>
-<p>编辑不能修改7层负载均衡名称<br>用到”更新Ingress” API<br>添加</p>
-<p>域名只能填一个<br>路径也只能填一个<br>选择器默认加载当前应用的第一个服务<br>端口默认是80<br>应用界面<br>高级设置<br>选择器和端口默认<br>绿色字段为由选择器和端口默认创建的Server<br>高级设置字段<br>默认名字<br>名称默认为:应用名_ingress</p>
-<p>默认创建的Server 名字规则为 ingress名字-ingress-default-server<br>值和Server名字相同</p>
-<p>默认名字规则为：应用名-ingress-default-server<br>应用名-镜像名</p>
-<p>requirements = [‘wget’, ‘git’, ‘net-tools’, ‘bind-utils’, ‘iptables-services’, ‘bridge-utils’, ‘bash-completion’,<br>                    ‘kexec-tools’, ‘sos’, ‘psacct’, ‘chrony’, ‘device-mapper-persistent-data’, ‘lvm2’, ‘audit’,<br>                    ‘systemd-journal’, ‘socat’, ‘ipvsadm’]<br>RUN yum install -y –setopt=obsoletes=0 wget git net-tools bind-utils iptables-services bridge-utils bash-completion kexec-tools sos psacct ntp chrony device-mapper-persistent-data lvm2 audit systemd-journal socat yum-utils  telnet tcpdump keepalived ipvsadm –downloadonly –downloaddir=/app/repo/packages</p>
-<p>requirements = [‘apt-transport-https’, ‘ca-certificates’, ‘lsb-release’, ‘software-properties-common’, ‘ntp’,’ipvsadm’]<br>RUN apt-get update  &amp;&amp; \<br>    apt-get install -y curl apt-transport-https ca-certificates lsb-release software-properties-common ntp keepalived ipvsadm</p>
+      <title><![CDATA[fluentd 收集 docker 容器终端输出的日志]]></title>
+      <url>/2017/09/04/fluent%20%E6%94%B6%E9%9B%86%20docker%20%E6%97%A5%E5%BF%97/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>fluentd 是一款强大的日志收集工具，docker log driver 也支持 fluentd,那么为什么不搞点大新闻呢？</p>
+</blockquote>
+<p><img src="http://p1teq0wgy.bkt.clouddn.com/fluentd.gif" alt="fluentd"></p>
+<a id="more"></a>
+<h3 id="1-在服务器上安装部署-fluentd-Ubuntu16-04"><a href="#1-在服务器上安装部署-fluentd-Ubuntu16-04" class="headerlink" title="1.在服务器上安装部署 fluentd (Ubuntu16.04)"></a>1.在服务器上安装部署 fluentd (Ubuntu16.04)</h3><h4 id="1-1-安装-fluentd"><a href="#1-1-安装-fluentd" class="headerlink" title="1.1 安装 fluentd"></a>1.1 安装 fluentd</h4><blockquote>
+<p>fluentd 安装过程请看 <a href="https://docs.fluentd.org/v0.12/articles/install-by-deb" target="_blank" rel="noopener">fluentd 官网</a></p>
+</blockquote>
+<h4 id="1-2-安装-mongodb-plugin"><a href="#1-2-安装-mongodb-plugin" class="headerlink" title="1.2 安装 mongodb plugin"></a>1.2 安装 mongodb plugin</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo td-agent-gem install fluent-plugin-mongo</span><br></pre></td></tr></table></figure>
+<h4 id="1-3-修改-fluentd-配置文件"><a href="#1-3-修改-fluentd-配置文件" class="headerlink" title="1.3 修改 fluentd 配置文件"></a>1.3 修改 fluentd 配置文件</h4><blockquote>
+<p>用 vim 打开 td-agent.conf</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim  /etc/td-agent/td-agent.conf</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>修改 td-agent.conf 为下面的配置文件</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;source&gt;</span><br><span class="line">	type forward</span><br><span class="line">	port 24224</span><br><span class="line">	bind 0.0.0.0</span><br><span class="line">	tag docker.access</span><br><span class="line">&lt;/source&gt;</span><br><span class="line"></span><br><span class="line">&lt;match **&gt;</span><br><span class="line">	@type mongo</span><br><span class="line">	database apache</span><br><span class="line">	collection access</span><br><span class="line">	host localhost</span><br><span class="line">	port 27017</span><br><span class="line">	&lt;buffer&gt;</span><br><span class="line">		flush_interval 3s</span><br><span class="line">	&lt;/buffer&gt;</span><br><span class="line">	&lt;inject&gt;</span><br><span class="line">		time_key time</span><br><span class="line">	&lt;/inject&gt;</span><br><span class="line">&lt;/match&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="1-4-重启-td-agent"><a href="#1-4-重启-td-agent" class="headerlink" title="1.4 重启 td-agent"></a>1.4 重启 td-agent</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /etc/init.d/td-agent restart</span><br></pre></td></tr></table></figure>
+<h4 id="1-5-检测-td-agent-运行状态"><a href="#1-5-检测-td-agent-运行状态" class="headerlink" title="1.5 检测 td-agent 运行状态"></a>1.5 检测 td-agent 运行状态</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /etc/init.d/td-agent status</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>有下面输出表示 td-agent 运行成功<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* td-agent is running</span><br></pre></td></tr></table></figure></p>
+</blockquote>
 ]]></content>
       
+        <categories>
+            
+            <category> docker </category>
+            
+        </categories>
+        
         
         <tags>
             
@@ -108,21 +152,30 @@ source .bashrc
     </entry>
     
     <entry>
-      <title><![CDATA[ufw使用笔记]]></title>
+      <title><![CDATA[ubuntu 上的 ufw]]></title>
       <url>/2017/08/26/ufw%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</url>
-      <content type="html"><![CDATA[<p>最近在使用学校的云服务器，真心烦，各种端口限制，不过还好，在被限制的情况下逼迫自己学会使用nginx做反向代理，同时会用ufw。<br>面是记录自己使用ufw的一些记录，防止自己忘掉。</p>
-<h3 id="安装ufw"><a href="#安装ufw" class="headerlink" title="安装ufw"></a>安装ufw</h3><ul>
+      <content type="html"><![CDATA[<blockquote>
+<p>最近在使用学校的云服务器，真心烦，各种端口限制，不过还好，在被限制的情况下逼迫自己学会使用nginx做反向代理，同时会用ufw。<br>面是记录自己使用ufw的一些记录，防止自己忘掉。</p>
+</blockquote>
+<p><img src="http://p1teq0wgy.bkt.clouddn.com/ufw.png" alt="uwf"></p>
+<a id="more"></a>
+<h3 id="1-安装ufw"><a href="#1-安装ufw" class="headerlink" title="1.安装ufw"></a>1.安装ufw</h3><ul>
 <li>sudo apt-get install ufw</li>
 </ul>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><ul>
+<h3 id="2-使用"><a href="#2-使用" class="headerlink" title="2.使用"></a>2.使用</h3><ul>
 <li>sudo ufw status   //查看开放的状态</li>
 <li>sudo ufw allow 8000      //开放8000</li>
 <li>sudo ufw deny 8000      //关闭 8000</li>
 <li>ufw -h       //具体查看使用帮助</li>
 </ul>
-<p>5900<br>22</p>
 ]]></content>
       
+        <categories>
+            
+            <category> linux </category>
+            
+        </categories>
+        
         
         <tags>
             
@@ -135,17 +188,27 @@ source .bashrc
     <entry>
       <title><![CDATA[Ubuntu16.04 软件源]]></title>
       <url>/2017/08/24/Ubuntu%E8%BD%AF%E4%BB%B6%E6%BA%90/</url>
-      <content type="html"><![CDATA[<p>之前一直用ubuntu14.04,那时安装软件基本没什么问题，但是到了ubuntu16.04各种问题都出现了，比如通过deb包安装搜狗输入法，docker等时依赖无法下载，经过一番折腾，发现是软件源不正常导致，所以想把这一折腾结构记录一下以免下次自己又得去折腾。</p>
+      <content type="html"><![CDATA[<blockquote>
+<p>之前一直用ubuntu14.04,那时安装软件基本没什么问题，但是到了ubuntu16.04各种问题都出现了，比如通过deb包安装搜狗输入法，docker等时依赖无法下载，经过一番折腾，发现是软件源不正常导致，所以想把这一折腾结构记录一下以免下次自己又得去折腾。</p>
+</blockquote>
+<p><img src="http://p1teq0wgy.bkt.clouddn.com/ubuntu.png" alt="ubuntu"></p>
+<a id="more"></a>
 <h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><ul>
 <li>sudo cp /etc/apt/source.list /etc/apt/backup_source.list 备份</li>
 <li>vim /ete/apt/source.list 把原来的全删了，改为下面软件源</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> deb cdrom:[Ubuntu 16.04 LTS _Xenial Xerus_ - Release amd64 (20160420.1)]/ xenial main restricted</span><br><span class="line">deb-src http://archive.ubuntu.com/ubuntu xenial main restricted #Added by software-properties</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted multiverse universe #Added by software-properties</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted multiverse universe #Added by software-properties</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse #Added by software-properties</span><br><span class="line">deb http://archive.canonical.com/ubuntu xenial partner</span><br><span class="line">deb-src http://archive.canonical.com/ubuntu xenial partner</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted multiverse universe #Added by software-properties</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security multiverse</span><br><span class="line">deb http://cz.archive.ubuntu.com/ubuntu trusty main</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> deb cdrom:[Ubuntu 16.04 LTS _Xenial Xerus_ - Release amd64 (20160420.1)]/ xenial main restricted</span></span><br><span class="line">deb-src http://archive.ubuntu.com/ubuntu xenial main restricted #Added by software-properties</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted multiverse universe #Added by software-properties</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted multiverse universe #Added by software-properties</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse #Added by software-properties</span><br><span class="line">deb http://archive.canonical.com/ubuntu xenial partner</span><br><span class="line">deb-src http://archive.canonical.com/ubuntu xenial partner</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted multiverse universe #Added by software-properties</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security multiverse</span><br><span class="line">deb http://cz.archive.ubuntu.com/ubuntu trusty main</span><br></pre></td></tr></table></figure>
 <ul>
 <li>sudo apt update 更新一下即可</li>
 </ul>
 ]]></content>
       
+        <categories>
+            
+            <category> linux </category>
+            
+        </categories>
+        
         
         <tags>
             
@@ -156,123 +219,14 @@ source .bashrc
     </entry>
     
     <entry>
-      <title><![CDATA[Ingress_API]]></title>
-      <url>/2017/08/23/ingress_API/</url>
-      <content type="html"><![CDATA[<h3 id="Ingresses-API使用"><a href="#Ingresses-API使用" class="headerlink" title="Ingresses API使用"></a>Ingresses API使用</h3><h4 id="Ingress-写操作"><a href="#Ingress-写操作" class="headerlink" title="Ingress 写操作"></a>Ingress 写操作</h4><ul>
-<li><p>创建 ingress API</p>
-<pre><code>POST /apis/extensions/v1beta1/namespaces/{namespace}/ingresses
-</code></pre></li>
-<li>创建 ingress API 调用示例</li>
-</ul>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">请求：</span><br><span class="line"></span><br><span class="line">curl -X POST -H 'Content-Type: application/yaml' --data '</span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: test2</span><br><span class="line">  namespace: kube-system</span><br><span class="line">spec:</span><br><span class="line">  rules:</span><br><span class="line">  - host: www.for.com</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - backend:</span><br><span class="line">          serviceName: kubernetes-dashboard</span><br><span class="line">          servicePort: 19090</span><br><span class="line">        path: /fooo12</span><br><span class="line">' http://127.0.0.1:18081/apis/extensions/v1beta1/namespaces/kube-system/ingresses</span><br><span class="line"></span><br><span class="line">返回：</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"kind"</span>: <span class="string">"Ingress"</span>,</span><br><span class="line">    <span class="attr">"apiVersion"</span>: <span class="string">"extensions/v1beta1"</span>,</span><br><span class="line">    <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"test"</span>,</span><br><span class="line">      <span class="attr">"namespace"</span>: <span class="string">"kube-system"</span>,</span><br><span class="line">      <span class="attr">"selfLink"</span>: <span class="string">"/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test"</span>,</span><br><span class="line">      <span class="attr">"uid"</span>: <span class="string">"ebc3e999-87d7-11e7-9381-0242ac130006"</span>,</span><br><span class="line">      <span class="attr">"resourceVersion"</span>: <span class="string">"135888"</span>,</span><br><span class="line">      <span class="attr">"generation"</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">"creationTimestamp"</span>: <span class="string">"2017-08-23T07:51:50Z"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"spec"</span>: &#123;</span><br><span class="line">      <span class="attr">"rules"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"host"</span>: <span class="string">"www.foryung.com"</span>,</span><br><span class="line">          <span class="attr">"http"</span>: &#123;</span><br><span class="line">            <span class="attr">"paths"</span>: [</span><br><span class="line">              &#123;</span><br><span class="line">                <span class="attr">"path"</span>: <span class="string">"/fooo"</span>,</span><br><span class="line">                <span class="attr">"backend"</span>: &#123;</span><br><span class="line">                  <span class="attr">"serviceName"</span>: <span class="string">"kubernetes-dashboard"</span>,</span><br><span class="line">                  <span class="attr">"servicePort"</span>: <span class="number">19090</span></span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"status"</span>: &#123;</span><br><span class="line">      <span class="attr">"loadBalancer"</span>: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>更新已有 ingress的局部信息 API</li>
-</ul>
-<pre><code>PATCH /apis/extensions/v1beta1/namespaces/{namespace}/ingresses/{name}
-</code></pre><ul>
-<li>更新已有 ingress的局部信息 API 调用示例(把host改为 www.for.com)</li>
-</ul>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      请求：</span><br><span class="line"></span><br><span class="line">        curl --request PATCH -H 'Content-Type: application/strategic-merge-patch+json' --data '</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">            <span class="attr">"name"</span>:<span class="string">"test2"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"spec"</span>: &#123;</span><br><span class="line">              <span class="attr">"rules"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                  <span class="attr">"host"</span>: <span class="string">"www.for.com"</span>,</span><br><span class="line">                  <span class="attr">"http"</span>: &#123;</span><br><span class="line">                    <span class="attr">"paths"</span>: [</span><br><span class="line">                      &#123;</span><br><span class="line">                        <span class="attr">"path"</span>: <span class="string">"/foooasdf"</span>,</span><br><span class="line">                        <span class="attr">"backend"</span>: &#123;</span><br><span class="line">                          <span class="attr">"serviceName"</span>: <span class="string">"kubernetes-dashboard"</span>,</span><br><span class="line">                          <span class="attr">"servicePort"</span>: <span class="number">19090</span></span><br><span class="line">                        &#125;</span><br><span class="line">                      &#125;</span><br><span class="line">                    ]</span><br><span class="line">                  &#125;</span><br><span class="line">                &#125;</span><br><span class="line">              ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">        ' http://127.0.0.1:18081/apis/extensions/v1beta1/namespaces/default/ingresses/test2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      返回：</span><br><span class="line"></span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">"kind"</span>: <span class="string">"Ingress"</span>,</span><br><span class="line">        <span class="attr">"apiVersion"</span>: <span class="string">"extensions/v1beta1"</span>,</span><br><span class="line">        <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"test"</span>,</span><br><span class="line">          <span class="attr">"namespace"</span>: <span class="string">"kube-system"</span>,</span><br><span class="line">          <span class="attr">"selfLink"</span>: <span class="string">"/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test"</span>,</span><br><span class="line">          <span class="attr">"uid"</span>: <span class="string">"ebc3e999-87d7-11e7-9381-0242ac130006"</span>,</span><br><span class="line">          <span class="attr">"resourceVersion"</span>: <span class="string">"145533"</span>,</span><br><span class="line">          <span class="attr">"generation"</span>: <span class="number">4</span>,</span><br><span class="line">          <span class="attr">"creationTimestamp"</span>: <span class="string">"2017-08-23T07:51:50Z"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"spec"</span>: &#123;</span><br><span class="line">          <span class="attr">"rules"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">              <span class="attr">"host"</span>: <span class="string">"www.for.com"</span>,</span><br><span class="line">              <span class="attr">"http"</span>: &#123;</span><br><span class="line">                <span class="attr">"paths"</span>: [</span><br><span class="line">                  &#123;</span><br><span class="line">                    <span class="attr">"path"</span>: <span class="string">"/fooo"</span>,</span><br><span class="line">                    <span class="attr">"backend"</span>: &#123;</span><br><span class="line">                      <span class="attr">"serviceName"</span>: <span class="string">"kubernetes-dashboard"</span>,</span><br><span class="line">                      <span class="attr">"servicePort"</span>: <span class="number">19090</span></span><br><span class="line">                    &#125;</span><br><span class="line">                  &#125;</span><br><span class="line">                ]</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          ]</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"status"</span>: &#123;</span><br><span class="line">          <span class="attr">"loadBalancer"</span>: &#123;</span><br><span class="line">            <span class="attr">"ingress"</span>: [</span><br><span class="line">              &#123;</span><br><span class="line">                <span class="attr">"ip"</span>: <span class="string">"192.168.2.80"</span></span><br><span class="line">              &#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>替换 已有 ingress API</li>
-</ul>
-<pre><code>PUT /apis/extensions/v1beta1/namespaces/{namespace}/ingresses/{name}
-</code></pre><ul>
-<li>替换 已有 ingress API 调用示例</li>
-</ul>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">请求：</span><br><span class="line">curl -X PUT -H 'Content-Type: application/yaml' --data '</span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: test</span><br><span class="line">  namespace: kube-system</span><br><span class="line">spec:</span><br><span class="line">  rules:</span><br><span class="line">  - host: www.forasdfdfasdf.com</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - backend:</span><br><span class="line">          serviceName: kubernetes-dashboard</span><br><span class="line">          servicePort: 19090</span><br><span class="line">        path: /fooo</span><br><span class="line">' http://127.0.0.1:18081/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">返回：</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"kind"</span>: <span class="string">"Ingress"</span>,</span><br><span class="line">    <span class="attr">"apiVersion"</span>: <span class="string">"extensions/v1beta1"</span>,</span><br><span class="line">    <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"test"</span>,</span><br><span class="line">      <span class="attr">"namespace"</span>: <span class="string">"kube-system"</span>,</span><br><span class="line">      <span class="attr">"selfLink"</span>: <span class="string">"/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test"</span>,</span><br><span class="line">      <span class="attr">"uid"</span>: <span class="string">"ebc3e999-87d7-11e7-9381-0242ac130006"</span>,</span><br><span class="line">      <span class="attr">"resourceVersion"</span>: <span class="string">"145714"</span>,</span><br><span class="line">      <span class="attr">"generation"</span>: <span class="number">5</span>,</span><br><span class="line">      <span class="attr">"creationTimestamp"</span>: <span class="string">"2017-08-23T07:51:50Z"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"spec"</span>: &#123;</span><br><span class="line">      <span class="attr">"rules"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"host"</span>: <span class="string">"www.forasdfdfasdf.com"</span>,</span><br><span class="line">          <span class="attr">"http"</span>: &#123;</span><br><span class="line">            <span class="attr">"paths"</span>: [</span><br><span class="line">              &#123;</span><br><span class="line">                <span class="attr">"path"</span>: <span class="string">"/fooo"</span>,</span><br><span class="line">                <span class="attr">"backend"</span>: &#123;</span><br><span class="line">                  <span class="attr">"serviceName"</span>: <span class="string">"kubernetes-dashboard"</span>,</span><br><span class="line">                  <span class="attr">"servicePort"</span>: <span class="number">19090</span></span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"status"</span>: &#123;</span><br><span class="line">      <span class="attr">"loadBalancer"</span>: &#123;</span><br><span class="line">        <span class="attr">"ingress"</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">"ip"</span>: <span class="string">"192.168.2.80"</span></span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>删除某个已经存在的 ingress API</li>
-</ul>
-<pre><code>DELETE /apis/extensions/v1beta1/namespaces/{namespace}/ingresses/{name}
-</code></pre><ul>
-<li>删除某个已经存在的 ingress API 调用示例</li>
-</ul>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">请求：</span><br><span class="line"></span><br><span class="line">curl -X DELETE  http://127.0.0.1:18081/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test</span><br><span class="line"></span><br><span class="line">返回：</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"kind"</span>: <span class="string">"Status"</span>,</span><br><span class="line">  <span class="attr">"apiVersion"</span>: <span class="string">"v1"</span>,</span><br><span class="line">  <span class="attr">"metadata"</span>: &#123;&#125;,</span><br><span class="line">  <span class="attr">"status"</span>: <span class="string">"Success"</span>,</span><br><span class="line">  <span class="attr">"code"</span>: <span class="number">200</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>批量删除 ingress API</li>
-</ul>
-<pre><code>DELETE /apis/extensions/v1beta1/namespaces/{namespace}/ingresses
-</code></pre><ul>
-<li>批量删除 ingress API 调用示例<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">请求：</span><br><span class="line"></span><br><span class="line">curl -X DELETE  http://127.0.0.1:18081/apis/extensions/v1beta1/namespaces/kube-system/ingresses</span><br><span class="line"></span><br><span class="line">返回：</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"kind"</span>: <span class="string">"IngressList"</span>,</span><br><span class="line">  <span class="attr">"apiVersion"</span>: <span class="string">"extensions/v1beta1"</span>,</span><br><span class="line">  <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">    <span class="attr">"selfLink"</span>: <span class="string">"/apis/extensions/v1beta1/namespaces/kube-system/ingresses"</span>,</span><br><span class="line">    <span class="attr">"resourceVersion"</span>: <span class="string">"147599"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"items"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"test"</span>,</span><br><span class="line">        <span class="attr">"namespace"</span>: <span class="string">"kube-system"</span>,</span><br><span class="line">        <span class="attr">"selfLink"</span>: <span class="string">"/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test"</span>,</span><br><span class="line">        <span class="attr">"uid"</span>: <span class="string">"a7e900c0-87e9-11e7-9381-0242ac130006"</span>,</span><br><span class="line">        <span class="attr">"resourceVersion"</span>: <span class="string">"147347"</span>,</span><br><span class="line">        <span class="attr">"generation"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"creationTimestamp"</span>: <span class="string">"2017-08-23T09:58:47Z"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">"spec"</span>: &#123;</span><br><span class="line">        <span class="attr">"rules"</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">"host"</span>: <span class="string">"www.for.com"</span>,</span><br><span class="line">            <span class="attr">"http"</span>: &#123;</span><br><span class="line">              <span class="attr">"paths"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                  <span class="attr">"path"</span>: <span class="string">"/fooo"</span>,</span><br><span class="line">                  <span class="attr">"backend"</span>: &#123;</span><br><span class="line">                    <span class="attr">"serviceName"</span>: <span class="string">"kubernetes-dashboard"</span>,</span><br><span class="line">                    <span class="attr">"servicePort"</span>: <span class="number">19090</span></span><br><span class="line">                  &#125;</span><br><span class="line">                &#125;</span><br><span class="line">              ]</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">"status"</span>: &#123;</span><br><span class="line">        <span class="attr">"loadBalancer"</span>: &#123;</span><br><span class="line">          <span class="attr">"ingress"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">              <span class="attr">"ip"</span>: <span class="string">"192.168.2.80"</span></span><br><span class="line">            &#125;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"test1"</span>,</span><br><span class="line">        <span class="attr">"namespace"</span>: <span class="string">"kube-system"</span>,</span><br><span class="line">        <span class="attr">"selfLink"</span>: <span class="string">"/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test1"</span>,</span><br><span class="line">        <span class="attr">"uid"</span>: <span class="string">"b45329b4-87e9-11e7-9381-0242ac130006"</span>,</span><br><span class="line">        <span class="attr">"resourceVersion"</span>: <span class="string">"147395"</span>,</span><br><span class="line">        <span class="attr">"generation"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"creationTimestamp"</span>: <span class="string">"2017-08-23T09:59:08Z"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">"spec"</span>: &#123;</span><br><span class="line">        <span class="attr">"rules"</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">"host"</span>: <span class="string">"www.for.com"</span>,</span><br><span class="line">            <span class="attr">"http"</span>: &#123;</span><br><span class="line">              <span class="attr">"paths"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                  <span class="attr">"path"</span>: <span class="string">"/fooo1"</span>,</span><br><span class="line">                  <span class="attr">"backend"</span>: &#123;</span><br><span class="line">                    <span class="attr">"serviceName"</span>: <span class="string">"kubernetes-dashboard"</span>,</span><br><span class="line">                    <span class="attr">"servicePort"</span>: <span class="number">19090</span></span><br><span class="line">                  &#125;</span><br><span class="line">                &#125;</span><br><span class="line">              ]</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">"status"</span>: &#123;</span><br><span class="line">        <span class="attr">"loadBalancer"</span>: &#123;</span><br><span class="line">          <span class="attr">"ingress"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">              <span class="attr">"ip"</span>: <span class="string">"192.168.2.80"</span></span><br><span class="line">            &#125;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"test2"</span>,</span><br><span class="line">        <span class="attr">"namespace"</span>: <span class="string">"kube-system"</span>,</span><br><span class="line">        <span class="attr">"selfLink"</span>: <span class="string">"/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test2"</span>,</span><br><span class="line">        <span class="attr">"uid"</span>: <span class="string">"bedf2884-87e9-11e7-9381-0242ac130006"</span>,</span><br><span class="line">        <span class="attr">"resourceVersion"</span>: <span class="string">"147443"</span>,</span><br><span class="line">        <span class="attr">"generation"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"creationTimestamp"</span>: <span class="string">"2017-08-23T09:59:25Z"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">"spec"</span>: &#123;</span><br><span class="line">        <span class="attr">"rules"</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">"host"</span>: <span class="string">"www.for.com"</span>,</span><br><span class="line">            <span class="attr">"http"</span>: &#123;</span><br><span class="line">              <span class="attr">"paths"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                  <span class="attr">"path"</span>: <span class="string">"/fooo12"</span>,</span><br><span class="line">                  <span class="attr">"backend"</span>: &#123;</span><br><span class="line">                    <span class="attr">"serviceName"</span>: <span class="string">"kubernetes-dashboard"</span>,</span><br><span class="line">                    <span class="attr">"servicePort"</span>: <span class="number">19090</span></span><br><span class="line">                  &#125;</span><br><span class="line">                &#125;</span><br><span class="line">              ]</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">"status"</span>: &#123;</span><br><span class="line">        <span class="attr">"loadBalancer"</span>: &#123;</span><br><span class="line">          <span class="attr">"ingress"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">              <span class="attr">"ip"</span>: <span class="string">"192.168.2.80"</span></span><br><span class="line">            &#125;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="Ingress-读操作"><a href="#Ingress-读操作" class="headerlink" title="Ingress 读操作"></a>Ingress 读操作</h4><ul>
-<li>获取某个Ingress 的详情数据 API</li>
-</ul>
-<pre><code>GET /apis/extensions/v1beta1/namespaces/{namespace}/ingresses/{name}
-</code></pre><ul>
-<li>获取某个Ingress 的详情数据 API 调用示例</li>
-</ul>
- <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">请求：</span><br><span class="line">curl -X GET http://127.0.0.1:18081/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test2</span><br><span class="line"></span><br><span class="line">返回：</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"kind"</span>: <span class="string">"Ingress"</span>,</span><br><span class="line">    <span class="attr">"apiVersion"</span>: <span class="string">"extensions/v1beta1"</span>,</span><br><span class="line">    <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"test2"</span>,</span><br><span class="line">      <span class="attr">"namespace"</span>: <span class="string">"kube-system"</span>,</span><br><span class="line">      <span class="attr">"selfLink"</span>: <span class="string">"/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test2"</span>,</span><br><span class="line">      <span class="attr">"uid"</span>: <span class="string">"21a8fb07-87eb-11e7-9381-0242ac130006"</span>,</span><br><span class="line">      <span class="attr">"resourceVersion"</span>: <span class="string">"148281"</span>,</span><br><span class="line">      <span class="attr">"generation"</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">"creationTimestamp"</span>: <span class="string">"2017-08-23T10:09:20Z"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"spec"</span>: &#123;</span><br><span class="line">      <span class="attr">"rules"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"host"</span>: <span class="string">"www.for.com"</span>,</span><br><span class="line">          <span class="attr">"http"</span>: &#123;</span><br><span class="line">            <span class="attr">"paths"</span>: [</span><br><span class="line">              &#123;</span><br><span class="line">                <span class="attr">"path"</span>: <span class="string">"/fooo12"</span>,</span><br><span class="line">                <span class="attr">"backend"</span>: &#123;</span><br><span class="line">                  <span class="attr">"serviceName"</span>: <span class="string">"kubernetes-dashboard"</span>,</span><br><span class="line">                  <span class="attr">"servicePort"</span>: <span class="number">19090</span></span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"status"</span>: &#123;</span><br><span class="line">      <span class="attr">"loadBalancer"</span>: &#123;</span><br><span class="line">        <span class="attr">"ingress"</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">"ip"</span>: <span class="string">"192.168.2.80"</span></span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>获取所有 Ingress 的详细数据 API</li>
-</ul>
-<pre><code>GET /apis/extensions/v1beta1/namespaces/{namespace}/ingresses
-</code></pre><ul>
-<li>获取所有 Ingress 的详细数据 API 调用示例</li>
-</ul>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">请求：</span><br><span class="line"></span><br><span class="line">curl -X GET http://127.0.0.1:18081/apis/extensions/v1beta1/namespaces/kube-system/ingresses</span><br><span class="line"></span><br><span class="line">返回：</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"kind"</span>: <span class="string">"IngressList"</span>,</span><br><span class="line">      <span class="attr">"apiVersion"</span>: <span class="string">"extensions/v1beta1"</span>,</span><br><span class="line">      <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">        <span class="attr">"selfLink"</span>: <span class="string">"/apis/extensions/v1beta1/namespaces/kube-system/ingresses"</span>,</span><br><span class="line">        <span class="attr">"resourceVersion"</span>: <span class="string">"148289"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">"items"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">            <span class="attr">"name"</span>: <span class="string">"test2"</span>,</span><br><span class="line">            <span class="attr">"namespace"</span>: <span class="string">"kube-system"</span>,</span><br><span class="line">            <span class="attr">"selfLink"</span>: <span class="string">"/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test2"</span>,</span><br><span class="line">            <span class="attr">"uid"</span>: <span class="string">"21a8fb07-87eb-11e7-9381-0242ac130006"</span>,</span><br><span class="line">            <span class="attr">"resourceVersion"</span>: <span class="string">"148281"</span>,</span><br><span class="line">            <span class="attr">"generation"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"creationTimestamp"</span>: <span class="string">"2017-08-23T10:09:20Z"</span></span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="attr">"spec"</span>: &#123;</span><br><span class="line">            <span class="attr">"rules"</span>: [</span><br><span class="line">              &#123;</span><br><span class="line">                <span class="attr">"host"</span>: <span class="string">"www.for.com"</span>,</span><br><span class="line">                <span class="attr">"http"</span>: &#123;</span><br><span class="line">                  <span class="attr">"paths"</span>: [</span><br><span class="line">                    &#123;</span><br><span class="line">                      <span class="attr">"path"</span>: <span class="string">"/fooo12"</span>,</span><br><span class="line">                      <span class="attr">"backend"</span>: &#123;</span><br><span class="line">                        <span class="attr">"serviceName"</span>: <span class="string">"kubernetes-dashboard"</span>,</span><br><span class="line">                        <span class="attr">"servicePort"</span>: <span class="number">19090</span></span><br><span class="line">                      &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                  ]</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="attr">"status"</span>: &#123;</span><br><span class="line">            <span class="attr">"loadBalancer"</span>: &#123;</span><br><span class="line">              <span class="attr">"ingress"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                  <span class="attr">"ip"</span>: <span class="string">"192.168.2.80"</span></span><br><span class="line">                &#125;</span><br><span class="line">              ]</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>获取所namespace 下的所有 Ingress API</p>
-<pre><code>GET /apis/extensions/v1beta1/ingresses
-</code></pre></li>
-<li><p>获取所namespace 下的所有 Ingress API 调用示例</p>
-</li>
-</ul>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">请求：</span><br><span class="line">curl -X GET http://127.0.0.1:18081/apis/extensions/v1beta1/ingresses</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">返回：</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"kind"</span>: <span class="string">"IngressList"</span>,</span><br><span class="line">  <span class="attr">"apiVersion"</span>: <span class="string">"extensions/v1beta1"</span>,</span><br><span class="line">  <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">    <span class="attr">"selfLink"</span>: <span class="string">"/apis/extensions/v1beta1/ingresses"</span>,</span><br><span class="line">    <span class="attr">"resourceVersion"</span>: <span class="string">"261710"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"items"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"test2"</span>,</span><br><span class="line">        <span class="attr">"namespace"</span>: <span class="string">"kube-system"</span>,</span><br><span class="line">        <span class="attr">"selfLink"</span>: <span class="string">"/apis/extensions/v1beta1/namespaces/kube-system/ingresses/test2"</span>,</span><br><span class="line">        <span class="attr">"uid"</span>: <span class="string">"21a8fb07-87eb-11e7-9381-0242ac130006"</span>,</span><br><span class="line">        <span class="attr">"resourceVersion"</span>: <span class="string">"148281"</span>,</span><br><span class="line">        <span class="attr">"generation"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"creationTimestamp"</span>: <span class="string">"2017-08-23T10:09:20Z"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">"spec"</span>: &#123;</span><br><span class="line">        <span class="attr">"rules"</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">"host"</span>: <span class="string">"www.for.com"</span>,</span><br><span class="line">            <span class="attr">"http"</span>: &#123;</span><br><span class="line">              <span class="attr">"paths"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                  <span class="attr">"path"</span>: <span class="string">"/fooo12"</span>,</span><br><span class="line">                  <span class="attr">"backend"</span>: &#123;</span><br><span class="line">                    <span class="attr">"serviceName"</span>: <span class="string">"kubernetes-dashboard"</span>,</span><br><span class="line">                    <span class="attr">"servicePort"</span>: <span class="number">19090</span></span><br><span class="line">                  &#125;</span><br><span class="line">                &#125;</span><br><span class="line">              ]</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">"status"</span>: &#123;</span><br><span class="line">        <span class="attr">"loadBalancer"</span>: &#123;</span><br><span class="line">          <span class="attr">"ingress"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">              <span class="attr">"ip"</span>: <span class="string">"192.168.2.80"</span></span><br><span class="line">            &#125;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      
-        
-        <tags>
-            
-            <tag> k8s </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Ingress Controller]]></title>
-      <url>/2017/08/23/ingress-controller/</url>
-      <content type="html"><![CDATA[<h3 id="Ingress-Controller-配置文件"><a href="#Ingress-Controller-配置文件" class="headerlink" title="Ingress Controller 配置文件"></a>Ingress Controller 配置文件</h3><ul>
-<li>curl get 请求</li>
-</ul>
-<pre><code>curl -X GET http://127.0.0.1:18081/apis/extensions/v1beta1/namespaces/kube-system/ingresses
-</code></pre><ul>
-<li>curl post 请求</li>
-</ul>
-<pre><code>curl -X POST -H &apos;Content-Type: application/yaml&apos; --data &apos;
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: test
-  namespace: kube-system
-spec:
-  rules:
-  - host: www.foryung.com
-    http:
-      paths:
-      - backend:
-          serviceName: kubernetes-dashboard
-          servicePort: 19090
-        path: /fooo
-&apos; http://127.0.0.1:18081/apis/extensions/v1beta1/namespaces/kube-system/ingresses
-</code></pre>]]></content>
-      
-        
-        <tags>
-            
-            <tag> k8s </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[nginx 使用笔记]]></title>
+      <title><![CDATA[nginx 入门]]></title>
       <url>/2017/08/17/nginx/</url>
-      <content type="html"><![CDATA[<h3 id="nginx-使用笔记"><a href="#nginx-使用笔记" class="headerlink" title="nginx 使用笔记"></a>nginx 使用笔记</h3><h4 id="安装-ubuntu"><a href="#安装-ubuntu" class="headerlink" title="安装 (ubuntu)"></a>安装 (ubuntu)</h4><ul>
+      <content type="html"><![CDATA[<blockquote>
+<p>菜鸟入门 nginx</p>
+</blockquote>
+<p><img src="http://p1teq0wgy.bkt.clouddn.com/nginx.gif" alt="nginx"></p>
+<a id="more"></a>
+<h3 id="nginx-使用笔记"><a href="#nginx-使用笔记" class="headerlink" title="nginx 使用笔记"></a>nginx 使用笔记</h3><h4 id="安装-ubuntu"><a href="#安装-ubuntu" class="headerlink" title="安装 (ubuntu)"></a>安装 (ubuntu)</h4><ul>
 <li>sudo apt-get update</li>
 <li>sudo apt-get install nginx</li>
 </ul>
@@ -300,6 +254,12 @@ spec:
 </ul>
 ]]></content>
       
+        <categories>
+            
+            <category> nginx </category>
+            
+        </categories>
+        
         
         <tags>
             
@@ -310,71 +270,14 @@ spec:
     </entry>
     
     <entry>
-      <title><![CDATA[Hugo使用笔记]]></title>
-      <url>/2017/08/17/hugo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</url>
-      <content type="html"><![CDATA[<h3 id="hugo-使用笔记"><a href="#hugo-使用笔记" class="headerlink" title="hugo 使用笔记"></a>hugo 使用笔记</h3><h4 id="Go-安装"><a href="#Go-安装" class="headerlink" title="Go 安装"></a>Go 安装</h4><ul>
-<li>sudo apt-get install golang<h4 id="Hugo-deb包下载"><a href="#Hugo-deb包下载" class="headerlink" title="Hugo deb包下载"></a>Hugo deb包下载</h4></li>
-<li><a href="https://github.com/gohugoio/hugo/releases" target="_blank" rel="noopener">下载地址</a></li>
-</ul>
-]]></content>
-      
-        
-        <tags>
-            
-            <tag> hugo </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[daocloud实习笔记]]></title>
-      <url>/2017/07/05/daocloud%E5%AE%9E%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
-      <content type="html"><![CDATA[<h3 id="第一天"><a href="#第一天" class="headerlink" title="第一天"></a>第一天</h3><ul>
-<li>熟悉daocloud 设计的产品　DCE</li>
-</ul>
-<ul>
-<li>安装DCE</li>
-</ul>
-<pre><code>* bash -c &quot;$(docker run --rm daocloud.io/daocloud/dce install)&quot;
-</code></pre><ul>
-<li>卸载DCE</li>
-</ul>
-<pre><code>* bash -c &quot;$(docker run --rm daocloud.io/daocloud/dce uninstall --force)&quot;
-</code></pre><h3 id="第二天"><a href="#第二天" class="headerlink" title="第二天"></a>第二天</h3><h4 id="部属DCE开发环境"><a href="#部属DCE开发环境" class="headerlink" title="部属DCE开发环境"></a>部属DCE开发环境</h4><ul>
-<li><p>克隆项目到本地（dce-controller,dce-deployer)</p>
-</li>
-<li><p>在环境变量添加如下配置</p>
-</li>
-</ul>
-<pre><code>DOCKER_SELF_HOST_URL=tcp://192.168.100.177:12376
-SWARM_URL=tcp://192.168.100.177:2375
-PYTHONUNBUFFERED=1
-ETCD_URL=etcd://192.168.100.177:12379
-SSL_CERT_FILE=/home/zihua/DaoCloud/dce-deployer/certs/https/dce.crt
-SSL_PKEY_FILE=/home/zihua/DaoCloud/dce-deployer/certs/https/dce.key
-CLIENT_CERTIFICATION_PATH=/home/zihua/DaoCloud/dce-deployer/certs/client/client-cert.pem
-CLIENT_PRIVATE_KEY_PATH=/home/zihua/DaoCloud/dce-deployer/certs/client/client-key.pem
-CLIENT_CERTIFICATION_CA_PATH=/home/zihua/DaoCloud/dce-deployer/certs/client/ca.pem
-SSL_CERT_FILE=/home/zihua/DaoCloud/dce-deployer/certs/https/dce.crt
-</code></pre><h3 id="第三天"><a href="#第三天" class="headerlink" title="第三天"></a>第三天</h3><h4 id="学会重装，升级，DCE-并学会转DCE为各种模式，命令如下"><a href="#学会重装，升级，DCE-并学会转DCE为各种模式，命令如下" class="headerlink" title="学会重装，升级，DCE,并学会转DCE为各种模式，命令如下"></a>学会重装，升级，DCE,并学会转DCE为各种模式，命令如下</h4><ul>
-<li>docker run -i –rm daocloud.io/daocloud/dce:2.7.6-dev</li>
-</ul>
-]]></content>
-      
-        
-        <tags>
-            
-            <tag> 实习 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[docker使用笔记]]></title>
       <url>/2017/06/29/docker%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</url>
-      <content type="html"><![CDATA[<h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h3><ol>
+      <content type="html"><![CDATA[<blockquote>
+<p>docker 脑残粉</p>
+</blockquote>
+<p><img src="http://p1teq0wgy.bkt.clouddn.com/docker.jpg" alt="docker"></p>
+<a id="more"></a>
+<h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h3><ol>
 <li>curl -sSL <a href="http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/intranet" target="_blank" rel="noopener">http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/intranet</a> | sh -</li>
 <li>非root用户使用docker sudo usermod -aG docker userName</li>
 <li>重启电脑</li>
@@ -430,6 +333,12 @@ mongo 192.168.1.100:27017/test
 mongo 192.168.1.200:27017/test -u user -p password
 </code></pre>]]></content>
       
+        <categories>
+            
+            <category> docker </category>
+            
+        </categories>
+        
         
         <tags>
             
@@ -440,9 +349,14 @@ mongo 192.168.1.200:27017/test -u user -p password
     </entry>
     
     <entry>
-      <title><![CDATA[mongodb使用总结]]></title>
+      <title><![CDATA[mongodb 鉴权]]></title>
       <url>/2017/06/26/mongodb%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</url>
-      <content type="html"><![CDATA[<h3 id="Mongodb修改为密码登录"><a href="#Mongodb修改为密码登录" class="headerlink" title="Mongodb修改为密码登录"></a>Mongodb修改为密码登录</h3><ul>
+      <content type="html"><![CDATA[<blockquote>
+<p>mongodb 用户鉴权折腾记</p>
+</blockquote>
+<p><img src="http://p1teq0wgy.bkt.clouddn.com/mongo.jpg" alt="mongo"></p>
+<a id="more"></a>
+<h3 id="Mongodb修改为密码登录"><a href="#Mongodb修改为密码登录" class="headerlink" title="Mongodb修改为密码登录"></a>Mongodb修改为密码登录</h3><ul>
 <li>无密码登录到mongodb</li>
 </ul>
 <pre><code>mongo
@@ -490,6 +404,12 @@ mongo 192.168.1.200:27017/test -u user -p password
 </ol>
 ]]></content>
       
+        <categories>
+            
+            <category> mongo </category>
+            
+        </categories>
+        
         
         <tags>
             
@@ -500,10 +420,12 @@ mongo 192.168.1.200:27017/test -u user -p password
     </entry>
     
     <entry>
-      <title><![CDATA[英语学习小工具]]></title>
+      <title><![CDATA[chrome 插件开发]]></title>
       <url>/2017/03/22/google%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A8/</url>
-      <content type="html"><![CDATA[<hr>
-<a id="more"></a>
+      <content type="html"><![CDATA[<blockquote>
+<p>基于划词翻译插件实现的生词本。</p>
+</blockquote>
+<p><img src="http://p1teq0wgy.bkt.clouddn.com/chrome.jpg" alt="chrome"><br><a id="more"></a></p>
 <h1 id="英语学习小工具"><a href="#英语学习小工具" class="headerlink" title="英语学习小工具"></a>英语学习小工具</h1><h3 id="项目来源"><a href="#项目来源" class="headerlink" title="项目来源"></a>项目来源</h3><ul>
 <li>平时自己在chrome使用划词翻译遇到了很多陌生的单词，但是每次都是翻译完就完了，没能及时地把自己遇到过生词记录下来。</li>
 <li>如果能在每次使用翻译的时候把自己不会的单词默默地记录下来那么我们可以有针对性的复习自己不会的单词。</li>
@@ -514,56 +436,16 @@ mongo 192.168.1.200:27017/test -u user -p password
 </ul>
 ]]></content>
       
+        <categories>
+            
+            <category> 乱搞 </category>
+            
+        </categories>
+        
         
         <tags>
             
             <tag> chrome </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Markdown语法入门]]></title>
-      <url>/2017/03/18/Markdown%E8%AF%AD%E6%B3%95%E5%85%A5%E9%97%A8/</url>
-      <content type="html"><![CDATA[<h1 id="我久违的笔记"><a href="#我久违的笔记" class="headerlink" title="我久违的笔记"></a>我久违的笔记</h1><h2 id="写给自己"><a href="#写给自己" class="headerlink" title="写给自己"></a>写给自己</h2><p>很久前打算每天坚持写一些总结，日记用以记录自己的生活。</p>
-<p>但是每次都被自己的懒惰给征服了，希望这次自己能坚持下去吧！<br><a id="more"></a></p>
-<h3 id="markdown-练习"><a href="#markdown-练习" class="headerlink" title="markdown 练习"></a>markdown 练习</h3><p>一个人一个<em>非常懒惰</em> 的人</p>
-<p>但是一个<strong>积极向上</strong>的人</p>
-<p>懒惰不代表我不积极</p>
-<blockquote>
-<p>如果有一天我再次遇见你，我绝对看都不看你一眼！</p>
-<p>假如世界欺骗了你，不要悲伤，不要难过，你默默的记住就是了！</p>
-<h4 id="一个技术宅的世界"><a href="#一个技术宅的世界" class="headerlink" title="一个技术宅的世界"></a>一个技术宅的世界</h4></blockquote>
-<p>别人说你不行了，那不是 <em>你真</em> 的不行<br>你自己说自己不行了那你就是永远的 <em>不行</em> 了</p>
-<p>一个人要有目标是吧！</p>
-<ul>
-<li>目标</li>
-<li>懒惰</li>
-<li>废物</li>
-</ul>
-<ul>
-<li>世界</li>
-<li>和平</li>
-<li>爱好</li>
-</ul>
-<ol>
-<li>你好啊</li>
-<li>我很好</li>
-<li>好久不见啊</li>
-</ol>
-<p><a href="http://www.github.com/yahaa" target="_blank" rel="noopener">源代码</a></p>
-<pre><code>public class Singleton {
-    public static void main(String []args){
-        System.out.println(&quot;Love Java&quot;);
-    }
-}
-</code></pre>]]></content>
-      
-        
-        <tags>
-            
-            <tag> Markdown </tag>
             
         </tags>
         

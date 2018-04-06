@@ -1,12 +1,18 @@
 ---
-title: mongodb使用总结
+title: mongodb 鉴权
 date: 2017-06-26 00:37:08
 tags: mongodb
-description: mongodb 使用的一些笔记
 toc: true
 author: zihua
+categories: "mongo"
 avatar: /images/me.jpeg
 ---
+
+> mongodb 用户鉴权折腾记
+
+![mongo](http://p1teq0wgy.bkt.clouddn.com/mongo.jpg)
+
+<!--more-->
 
 ### Mongodb修改为密码登录
 * 无密码登录到mongodb

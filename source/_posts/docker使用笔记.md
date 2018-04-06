@@ -2,12 +2,17 @@
 title: docker使用笔记
 date: 2017-06-29 21:06:05
 tags: docker
-description: 关于docker 使用的一些记录
 toc: true
 author: zihua
+categories: "docker"
 avatar: /images/me.jpeg
 ---
 
+> docker 脑残粉
+
+![docker](http://p1teq0wgy.bkt.clouddn.com/docker.jpg)
+
+<!--more-->
 
 ### 安装docker
 1. curl -sSL http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/intranet | sh -
