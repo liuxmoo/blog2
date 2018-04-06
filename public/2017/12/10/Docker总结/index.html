@@ -184,20 +184,13 @@
             </div>
             <h2 class="post-title">Docker使用总结</h2>
             <div class="post-meta">
-                本文总共425个字 | 您是第<span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>位看到它们的小伙伴
+                本文总共278个字 | 您是第<span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>位看到它们的小伙伴
             </div>
         </div>
         <div class="post-content markdown-body">
             <blockquote>
-<p>好久没写博客了，去七牛实习了一个月，写了快一个月的Dockerfile,我个人是docker的脑残粉，现在的情况是，不管什么东西我都会想着docker化，所以想结合自己这一段时间的使用做一次总结吧。</p>
-</blockquote>
-<h3 id="非Linux命令行"><a href="#非Linux命令行" class="headerlink" title="非Linux命令行"></a>非Linux命令行</h3><blockquote>
 <p>写Dockerfile命令时千万要记住，你在写dockerfile不是在写linux命令,所以一般我们在Dockerfile中建议把多条命令合在一起，这样防止最后生成的镜像过于庞大。</p>
-</blockquote>
-<h3 id="容器的本质"><a href="#容器的本质" class="headerlink" title="容器的本质"></a>容器的本质</h3><blockquote>
 <p>docker中的每一个容器的本质是Linux上的一个进程，所以不要把docker当做虚拟机使用</p>
-</blockquote>
-<h3 id="在容器中控制宿主机上的docker"><a href="#在容器中控制宿主机上的docker" class="headerlink" title="在容器中控制宿主机上的docker"></a>在容器中控制宿主机上的docker</h3><blockquote>
 <p>之前在Daocloud实习，我一直非常困惑DCE(Daocloud的一款产品)是如何做到在容器中控制宿主机上的docker,一段时间的研究发现通过挂载 unix:///var/run/docker.sock 到容器中，就可以实现容器中控制宿主机上的docker</p>
 </blockquote>
 
