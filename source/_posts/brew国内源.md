@@ -12,6 +12,8 @@ avatar: /images/me.jpeg
 
 ![brew](http://p1lpgmbe0.bkt.clouddn.com/homebrew.png)
 
+<!--more-->
+
 * 修改 brew 源为清华大学源
 
 ```bash
