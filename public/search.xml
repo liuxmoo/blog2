@@ -3,6 +3,43 @@
   
     
     <entry>
+      <title><![CDATA[c调用第三方库]]></title>
+      <url>/2018/05/14/c%E8%B0%83%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>go、java等其它高级语言调用第三方库是非常简单的，但是到了c就不一样了(其实还是简单只是我不会)。</p>
+</blockquote>
+<p><img src="http://p1lpgmbe0.bkt.clouddn.com/c.png" alt="c"></p>
+<a id="more"></a>
+<h4 id="c-使用-hiredis"><a href="#c-使用-hiredis" class="headerlink" title="c 使用 hiredis"></a>c 使用 hiredis</h4><blockquote>
+<p>hiredis 使用</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/redis/hiredis.git</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>测试代码 main.c</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;hiredis/hiredis.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	redisContext *conn = redisConnect(<span class="string">"127.0.0.1"</span>, <span class="number">6379</span>);</span><br><span class="line">	<span class="keyword">if</span> (conn != <span class="literal">NULL</span> &amp;&amp; conn-&gt;err) &#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"connection error: %s\n"</span>, conn-&gt;errstr);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	redisReply *reply;</span><br><span class="line">	reply = redisCommand(conn, <span class="string">"SET %s %s"</span>, <span class="string">"foo"</span>, <span class="string">"bar"</span>);</span><br><span class="line">	freeReplyObject(reply);</span><br><span class="line">	reply = redisCommand(conn, <span class="string">"GET %s"</span>, <span class="string">"foo"</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, reply-&gt;str);</span><br><span class="line">	freeReplyObject(reply);</span><br><span class="line">	redisFree(conn);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>用 gcc 编译</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o main main.c -L/usr/<span class="built_in">local</span>/lib -lhiredis</span><br></pre></td></tr></table></figure>
+]]></content>
+      
+        <categories>
+            
+            <category> c </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> c </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[brew国内源]]></title>
       <url>/2018/04/29/brew%E5%9B%BD%E5%86%85%E6%BA%90/</url>
       <content type="html"><![CDATA[<blockquote>
