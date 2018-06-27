@@ -97,15 +97,15 @@
 <meta name="description" content="go、java等其它高级语言调用第三方库是非常简单的，但是到了c就不一样了(其实还是简单只是我不会)。">
 <meta name="keywords" content="c">
 <meta property="og:type" content="article">
-<meta property="og:title" content="c调用第三方库">
+<meta property="og:title" content="c 使用笔记">
 <meta property="og:url" content="http://blog.foryung.com/2018/05/14/c调用第三方库/index.html">
 <meta property="og:site_name" content="Gofoer">
 <meta property="og:description" content="go、java等其它高级语言调用第三方库是非常简单的，但是到了c就不一样了(其实还是简单只是我不会)。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p1lpgmbe0.bkt.clouddn.com/c.png">
-<meta property="og:updated_time" content="2018-05-14T07:33:22.000Z">
+<meta property="og:updated_time" content="2018-06-27T10:42:47.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="c调用第三方库">
+<meta name="twitter:title" content="c 使用笔记">
 <meta name="twitter:description" content="go、java等其它高级语言调用第三方库是非常简单的，但是到了c就不一样了(其实还是简单只是我不会)。">
 <meta name="twitter:image" content="http://p1lpgmbe0.bkt.clouddn.com/c.png">
 
@@ -142,7 +142,7 @@
 
 
 
-  <title>c调用第三方库 | Gofoer</title>
+  <title>c 使用笔记 | Gofoer</title>
   
 
 
@@ -302,7 +302,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">c调用第三方库</h1>
+          <h1 class="post-title" itemprop="name headline">c 使用笔记</h1>
         
 
         <div class="post-meta">
@@ -391,6 +391,32 @@
 <p>用 gcc 编译</p>
 </blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o main main.c -L/usr/<span class="built_in">local</span>/lib -lhiredis</span><br></pre></td></tr></table></figure>
+<h4 id="c-静态连接库的制作"><a href="#c-静态连接库的制作" class="headerlink" title="c 静态连接库的制作"></a>c 静态连接库的制作</h4><ul>
+<li>现有 hello.c hello.h 如何把 hello.c制作成成一个静态连接库呢？</li>
+</ul>
+<blockquote>
+<p>hello.h</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> HELLO_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> HELLO_H</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">hello</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>hello.c</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">hello</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>制作静态连接库</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc -o hello.o -c hello.c // 生成 .o 文件</span><br><span class="line">ar -r libhello.a hello.o  // 生成 .a 文件</span><br></pre></td></tr></table></figure>
+<ul>
+<li>静态连接库使用<blockquote>
+<p>c/c++使用第三方库要指定头文件所在位置，以及静态连接库，举个例子如下:</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp hello.h /usr/<span class="built_in">local</span>/include</span><br><span class="line">cp libhello.a /usr/<span class="built_in">local</span>/bin</span><br><span class="line"><span class="comment"># 这里我 cp 到指定目录方便举例子</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>main.c 如下<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"hello.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	hello(<span class="string">"aabbcc"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>编译运行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o main -I/usr/<span class="built_in">local</span>/include -L/usr/<span class="built_in">local</span>/bin -lhello main.c</span><br></pre></td></tr></table></figure></p>
+</blockquote>
 
       
     </div>
@@ -510,7 +536,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -521,7 +547,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -532,7 +558,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -580,7 +606,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#c-使用-hiredis"><span class="nav-number">1.</span> <span class="nav-text"><a href="#c-&#x4F7F;&#x7528;-hiredis" class="headerlink" title="c &#x4F7F;&#x7528; hiredis"></a>c &#x4F7F;&#x7528; hiredis</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#c-使用-hiredis"><span class="nav-number">1.</span> <span class="nav-text"><a href="#c-&#x4F7F;&#x7528;-hiredis" class="headerlink" title="c &#x4F7F;&#x7528; hiredis"></a>c &#x4F7F;&#x7528; hiredis</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#c-静态连接库的制作"><span class="nav-number">2.</span> <span class="nav-text"><a href="#c-&#x9759;&#x6001;&#x8FDE;&#x63A5;&#x5E93;&#x7684;&#x5236;&#x4F5C;" class="headerlink" title="c &#x9759;&#x6001;&#x8FDE;&#x63A5;&#x5E93;&#x7684;&#x5236;&#x4F5C;"></a>c &#x9759;&#x6001;&#x8FDE;&#x63A5;&#x5E93;&#x7684;&#x5236;&#x4F5C;</span></a></li></ol></div>
             
 
           </div>

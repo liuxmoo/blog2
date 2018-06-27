@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="k8s," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="网上一大片 k8s 集群的部署教程，，，我也来写一篇吧，至少我自己能看懂自己写的。  ![docker](http://p1teq0wgy.bkt.clouddn.com/docker.jpg">
+<meta name="keywords" content="k8s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ubuntu server 16.04 跑 k8s 集群">
+<meta property="og:url" content="http://blog.foryung.com/2018/06/16/ubuntu-server-16-04-跑-k8s-集群/index.html">
+<meta property="og:site_name" content="Gofoer">
+<meta property="og:description" content="网上一大片 k8s 集群的部署教程，，，我也来写一篇吧，至少我自己能看懂自己写的。  ![docker](http://p1teq0wgy.bkt.clouddn.com/docker.jpg">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-06-17T05:34:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ubuntu server 16.04 跑 k8s 集群">
+<meta name="twitter:description" content="网上一大片 k8s 集群的部署教程，，，我也来写一篇吧，至少我自己能看懂自己写的。  ![docker](http://p1teq0wgy.bkt.clouddn.com/docker.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.foryung.com/2018/06/16/ubuntu-server-16-04-跑-k8s-集群/"/>
+
+
+
+
+
+  <title>ubuntu server 16.04 跑 k8s 集群 | Gofoer</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Gofoer</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Something new,something interesting.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.foryung.com/2018/06/16/ubuntu-server-16-04-跑-k8s-集群/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zihua">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://p1teq0wgy.bkt.clouddn.com/1514707487WechatIMG13.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gofoer">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ubuntu server 16.04 跑 k8s 集群</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-16T22:44:57+08:00">
+                2018-06-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/k8s/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>网上一大片 k8s 集群的部署教程，，，我也来写一篇吧，至少我自己能看懂自己写的。</p>
+</blockquote>
+<p>![docker](<a href="http://p1teq0wgy.bkt.clouddn.com/docker.jpg" target="_blank" rel="noopener">http://p1teq0wgy.bkt.clouddn.com/docker.jpg</a></p>
+<a id="more"></a>
+<h3 id="1-服务器准备"><a href="#1-服务器准备" class="headerlink" title="1. 服务器准备"></a>1. 服务器准备</h3><ul>
+<li><p>本次部署采用的服务器是 ubuntu server 16.04，<a href="http://releases.ubuntu.com/16.04/ubuntu-16.04.4-server-amd64.iso" target="_blank" rel="noopener">下载地址</a></p>
+</li>
+<li><p>在 virtualbox 安装三份虚拟机，修改虚拟机 ip 为静态 ip 地址，hostname 分别如下表:</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>ip</th>
+<th style="text-align:right">hostname</th>
+<th style="text-align:center">user</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.0.110</td>
+<td style="text-align:right">master</td>
+<td style="text-align:center">zihua</td>
+</tr>
+<tr>
+<td>192.168.0.111</td>
+<td style="text-align:right">node1</td>
+<td style="text-align:center">zihua</td>
+</tr>
+<tr>
+<td>192.168.0.112</td>
+<td style="text-align:right">node2</td>
+<td style="text-align:center">zihua</td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-1-ubuntu-虚拟机节点环境准备-master-为例"><a href="#1-1-ubuntu-虚拟机节点环境准备-master-为例" class="headerlink" title="1.1 ubuntu 虚拟机节点环境准备(master 为例)"></a>1.1 ubuntu 虚拟机节点环境准备(master 为例)</h4><h5 id="1-1-1-修改-hostname"><a href="#1-1-1-修改-hostname" class="headerlink" title="1.1.1 修改 hostname"></a>1.1.1 修改 hostname</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/hostname</span><br></pre></td></tr></table></figure>
+<h5 id="1-1-2-修改-ip-为静态-ip-地址"><a href="#1-1-2-修改-ip-为静态-ip-地址" class="headerlink" title="1.1.2 修改 ip 为静态 ip 地址"></a>1.1.2 修改 ip 为静态 ip 地址</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/network/interfaces</span><br></pre></td></tr></table></figure>
+<h5 id="1-1-3-把-etc-network-interfaces-改为如下"><a href="#1-1-3-把-etc-network-interfaces-改为如下" class="headerlink" title="1.1.3 把 /etc/network/interfaces 改为如下:"></a>1.1.3 把 /etc/network/interfaces 改为如下:</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># This file describes the network interfaces available on your system</span></span><br><span class="line"><span class="comment"># and how to activate them. For more information, see interfaces(5).</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> /etc/network/interfaces.d/*</span><br><span class="line"></span><br><span class="line"><span class="comment"># The loopback network interface</span></span><br><span class="line">auto lo</span><br><span class="line">iface lo inet loopback</span><br><span class="line"></span><br><span class="line"><span class="comment"># The primary network interface</span></span><br><span class="line">auto enp0s3</span><br><span class="line">iface enp0s3 inet static</span><br><span class="line">address 192.168.0.110</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">network 192.168.0.0</span><br><span class="line">broadcast 192.168.0.255</span><br><span class="line">gateway 192.168.0.1</span><br><span class="line">dns-nameservers 192.168.0.1</span><br><span class="line">dns-search pcat</span><br></pre></td></tr></table></figure>
+<h5 id="1-1-4-修改软件源为国内软件源-vim-etc-apt-sources-list-内容如下"><a href="#1-1-4-修改软件源为国内软件源-vim-etc-apt-sources-list-内容如下" class="headerlink" title="1.1.4 修改软件源为国内软件源 vim /etc/apt/sources.list,内容如下:"></a>1.1.4 修改软件源为国内软件源 vim /etc/apt/sources.list,内容如下:</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># deb cdrom:[Ubuntu 16.04 LTS _Xenial Xerus_ - Release amd64 (20160420.1)]/ xenial main restricted</span></span><br><span class="line">deb-src http://archive.ubuntu.com/ubuntu xenial main restricted <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted multiverse universe <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted multiverse universe <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://archive.canonical.com/ubuntu xenial partner</span><br><span class="line">deb-src http://archive.canonical.com/ubuntu xenial partner</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted multiverse universe <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security multiverse</span><br><span class="line">deb http://cz.archive.ubuntu.com/ubuntu trusty main</span><br></pre></td></tr></table></figure>
+<h4 id="1-2-安装-docker-（k8s-1-10-0，最高支持-docker-17-03"><a href="#1-2-安装-docker-（k8s-1-10-0，最高支持-docker-17-03" class="headerlink" title="1.2 安装 docker （k8s 1.10.0，最高支持 docker 17.03)"></a>1.2 安装 docker （k8s 1.10.0，最高支持 docker 17.03)</h4><h5 id="1-2-1-deb-方式安装docker-地址"><a href="#1-2-1-deb-方式安装docker-地址" class="headerlink" title="1.2.1 deb 方式安装docker 地址"></a>1.2.1 deb 方式安装docker <a href="https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce_17.03.0~ce-0~ubuntu-xenial_amd64.deb" target="_blank" rel="noopener">地址</a></h5><h4 id="1-3-安装-k8s"><a href="#1-3-安装-k8s" class="headerlink" title="1.3 安装 k8s"></a>1.3 安装 k8s</h4><h5 id="1-3-1-安装-apt-https"><a href="#1-3-1-安装-apt-https" class="headerlink" title="1.3.1 安装 apt-https"></a>1.3.1 安装 apt-https</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update &amp;&amp; apt-get install -y apt-transport-https</span><br></pre></td></tr></table></figure>
+<h5 id="1-3-2-添加-k8s-软件包"><a href="#1-3-2-添加-k8s-软件包" class="headerlink" title="1.3.2 添加 k8s 软件包"></a>1.3.2 添加 k8s 软件包</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add </span><br><span class="line"></span><br><span class="line"><span class="comment"># 注如果不行请自己下载 apt-key,然后再 cat apt-key | apt-key add</span></span><br></pre></td></tr></table></figure>
+<h5 id="1-3-3-添加-k8s-deb-包"><a href="#1-3-3-添加-k8s-deb-包" class="headerlink" title="1.3.3 添加 k8s deb 包"></a>1.3.3 添加 k8s deb 包</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">deb http://apt.kubernetes.io/ kubernetes-xenial main </span><br><span class="line">sudp apt update <span class="comment"># 注 如果被墙 请修改 apt 走代理</span></span><br><span class="line">sudo apt-get install -y kubelet=1.10.4-00 kubeadm=1.10.4-00 kubectl=1.10.4-00 kubernetes-cni=0.6.0-00</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># apt 走代理</span></span><br><span class="line"></span><br><span class="line">sudo vim /etc/apt/apt.conf</span><br><span class="line"></span><br><span class="line">填写如下内容:</span><br><span class="line">Acquire::http::proxy <span class="string">"http://192.168.0.100:1087/"</span>;</span><br><span class="line">Acquire::https::proxy <span class="string">"http://192.168.0.100:1087/"</span>;</span><br></pre></td></tr></table></figure>
+<h5 id="1-3-4-准备-k8s-所需要的镜像"><a href="#1-3-4-准备-k8s-所需要的镜像" class="headerlink" title="1.3.4 准备 k8s 所需要的镜像"></a>1.3.4 准备 k8s 所需要的镜像</h5><blockquote>
+<p>注:这个镜像在国内是无法正常下载的，需要进过中转站提前下载</p>
+</blockquote>
+<h5 id="1-3-5-swap-关闭"><a href="#1-3-5-swap-关闭" class="headerlink" title="1.3.5 swap 关闭"></a>1.3.5 swap 关闭</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo swapoff -a</span><br></pre></td></tr></table></figure>
+<h5 id="1-3-6-安装一定要指定版本"><a href="#1-3-6-安装一定要指定版本" class="headerlink" title="1.3.6 安装一定要指定版本"></a>1.3.6 安装一定要指定版本</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo kubeadm init --kubernetes-version=v1.10.0 --pod-network-cidr=10.244.0.0/16</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注 不指定 --kubernetes-version=v1.10.0 的话会导致镜像无法下载</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/k8s/" rel="tag"># k8s</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/14/gcloud设置代理/" rel="next" title="gcloud设置代理">
+                <i class="fa fa-chevron-left"></i> gcloud设置代理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://p1teq0wgy.bkt.clouddn.com/1514707487WechatIMG13.jpeg"
+               alt="zihua" />
+          <p class="site-author-name" itemprop="name">zihua</p>
+           
+              <p class="site-description motion-element" itemprop="description">Something new,something interesting.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yahaa" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-服务器准备"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1-&#x670D;&#x52A1;&#x5668;&#x51C6;&#x5907;" class="headerlink" title="1. &#x670D;&#x52A1;&#x5668;&#x51C6;&#x5907;"></a>1. &#x670D;&#x52A1;&#x5668;&#x51C6;&#x5907;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-ubuntu-虚拟机节点环境准备-master-为例"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#1-1-ubuntu-&#x865A;&#x62DF;&#x673A;&#x8282;&#x70B9;&#x73AF;&#x5883;&#x51C6;&#x5907;-master-&#x4E3A;&#x4F8B;" class="headerlink" title="1.1 ubuntu &#x865A;&#x62DF;&#x673A;&#x8282;&#x70B9;&#x73AF;&#x5883;&#x51C6;&#x5907;(master &#x4E3A;&#x4F8B;)"></a>1.1 ubuntu &#x865A;&#x62DF;&#x673A;&#x8282;&#x70B9;&#x73AF;&#x5883;&#x51C6;&#x5907;(master &#x4E3A;&#x4F8B;)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-1-修改-hostname"><span class="nav-number">1.1.1.</span> <span class="nav-text"><a href="#1-1-1-&#x4FEE;&#x6539;-hostname" class="headerlink" title="1.1.1 &#x4FEE;&#x6539; hostname"></a>1.1.1 &#x4FEE;&#x6539; hostname</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-2-修改-ip-为静态-ip-地址"><span class="nav-number">1.1.2.</span> <span class="nav-text"><a href="#1-1-2-&#x4FEE;&#x6539;-ip-&#x4E3A;&#x9759;&#x6001;-ip-&#x5730;&#x5740;" class="headerlink" title="1.1.2 &#x4FEE;&#x6539; ip &#x4E3A;&#x9759;&#x6001; ip &#x5730;&#x5740;"></a>1.1.2 &#x4FEE;&#x6539; ip &#x4E3A;&#x9759;&#x6001; ip &#x5730;&#x5740;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-3-把-etc-network-interfaces-改为如下"><span class="nav-number">1.1.3.</span> <span class="nav-text"><a href="#1-1-3-&#x628A;-etc-network-interfaces-&#x6539;&#x4E3A;&#x5982;&#x4E0B;" class="headerlink" title="1.1.3 &#x628A; /etc/network/interfaces &#x6539;&#x4E3A;&#x5982;&#x4E0B;:"></a>1.1.3 &#x628A; /etc/network/interfaces &#x6539;&#x4E3A;&#x5982;&#x4E0B;:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-4-修改软件源为国内软件源-vim-etc-apt-sources-list-内容如下"><span class="nav-number">1.1.4.</span> <span class="nav-text"><a href="#1-1-4-&#x4FEE;&#x6539;&#x8F6F;&#x4EF6;&#x6E90;&#x4E3A;&#x56FD;&#x5185;&#x8F6F;&#x4EF6;&#x6E90;-vim-etc-apt-sources-list-&#x5185;&#x5BB9;&#x5982;&#x4E0B;" class="headerlink" title="1.1.4 &#x4FEE;&#x6539;&#x8F6F;&#x4EF6;&#x6E90;&#x4E3A;&#x56FD;&#x5185;&#x8F6F;&#x4EF6;&#x6E90; vim /etc/apt/sources.list,&#x5185;&#x5BB9;&#x5982;&#x4E0B;:"></a>1.1.4 &#x4FEE;&#x6539;&#x8F6F;&#x4EF6;&#x6E90;&#x4E3A;&#x56FD;&#x5185;&#x8F6F;&#x4EF6;&#x6E90; vim /etc/apt/sources.list,&#x5185;&#x5BB9;&#x5982;&#x4E0B;:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-安装-docker-（k8s-1-10-0，最高支持-docker-17-03"><span class="nav-number">1.2.</span> <span class="nav-text"><a href="#1-2-&#x5B89;&#x88C5;-docker-&#xFF08;k8s-1-10-0&#xFF0C;&#x6700;&#x9AD8;&#x652F;&#x6301;-docker-17-03" class="headerlink" title="1.2 &#x5B89;&#x88C5; docker &#xFF08;k8s 1.10.0&#xFF0C;&#x6700;&#x9AD8;&#x652F;&#x6301; docker 17.03)"></a>1.2 &#x5B89;&#x88C5; docker &#xFF08;k8s 1.10.0&#xFF0C;&#x6700;&#x9AD8;&#x652F;&#x6301; docker 17.03)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-1-deb-方式安装docker-地址"><span class="nav-number">1.2.1.</span> <span class="nav-text"><a href="#1-2-1-deb-&#x65B9;&#x5F0F;&#x5B89;&#x88C5;docker-&#x5730;&#x5740;" class="headerlink" title="1.2.1 deb &#x65B9;&#x5F0F;&#x5B89;&#x88C5;docker &#x5730;&#x5740;"></a>1.2.1 deb &#x65B9;&#x5F0F;&#x5B89;&#x88C5;docker <a href="https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce_17.03.0~ce-0~ubuntu-xenial_amd64.deb" target="_blank" rel="noopener">&#x5730;&#x5740;</a></span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-安装-k8s"><span class="nav-number">1.3.</span> <span class="nav-text"><a href="#1-3-&#x5B89;&#x88C5;-k8s" class="headerlink" title="1.3 &#x5B89;&#x88C5; k8s"></a>1.3 &#x5B89;&#x88C5; k8s</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3-1-安装-apt-https"><span class="nav-number">1.3.1.</span> <span class="nav-text"><a href="#1-3-1-&#x5B89;&#x88C5;-apt-https" class="headerlink" title="1.3.1 &#x5B89;&#x88C5; apt-https"></a>1.3.1 &#x5B89;&#x88C5; apt-https</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3-2-添加-k8s-软件包"><span class="nav-number">1.3.2.</span> <span class="nav-text"><a href="#1-3-2-&#x6DFB;&#x52A0;-k8s-&#x8F6F;&#x4EF6;&#x5305;" class="headerlink" title="1.3.2 &#x6DFB;&#x52A0; k8s &#x8F6F;&#x4EF6;&#x5305;"></a>1.3.2 &#x6DFB;&#x52A0; k8s &#x8F6F;&#x4EF6;&#x5305;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3-3-添加-k8s-deb-包"><span class="nav-number">1.3.3.</span> <span class="nav-text"><a href="#1-3-3-&#x6DFB;&#x52A0;-k8s-deb-&#x5305;" class="headerlink" title="1.3.3 &#x6DFB;&#x52A0; k8s deb &#x5305;"></a>1.3.3 &#x6DFB;&#x52A0; k8s deb &#x5305;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3-4-准备-k8s-所需要的镜像"><span class="nav-number">1.3.4.</span> <span class="nav-text"><a href="#1-3-4-&#x51C6;&#x5907;-k8s-&#x6240;&#x9700;&#x8981;&#x7684;&#x955C;&#x50CF;" class="headerlink" title="1.3.4 &#x51C6;&#x5907; k8s &#x6240;&#x9700;&#x8981;&#x7684;&#x955C;&#x50CF;"></a>1.3.4 &#x51C6;&#x5907; k8s &#x6240;&#x9700;&#x8981;&#x7684;&#x955C;&#x50CF;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3-5-swap-关闭"><span class="nav-number">1.3.5.</span> <span class="nav-text"><a href="#1-3-5-swap-&#x5173;&#x95ED;" class="headerlink" title="1.3.5 swap &#x5173;&#x95ED;"></a>1.3.5 swap &#x5173;&#x95ED;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3-6-安装一定要指定版本"><span class="nav-number">1.3.6.</span> <span class="nav-text"><a href="#1-3-6-&#x5B89;&#x88C5;&#x4E00;&#x5B9A;&#x8981;&#x6307;&#x5B9A;&#x7248;&#x672C;" class="headerlink" title="1.3.6 &#x5B89;&#x88C5;&#x4E00;&#x5B9A;&#x8981;&#x6307;&#x5B9A;&#x7248;&#x672C;"></a>1.3.6 &#x5B89;&#x88C5;&#x4E00;&#x5B9A;&#x8981;&#x6307;&#x5B9A;&#x7248;&#x672C;</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="docker," />
+  <meta name="keywords" content="gcloud," />
 
 
 
@@ -94,20 +94,18 @@
 
 
 
-<meta name="description" content="docker 脑残粉">
-<meta name="keywords" content="docker">
+<meta name="description" content="详情请看 csdn">
+<meta name="keywords" content="gcloud">
 <meta property="og:type" content="article">
-<meta property="og:title" content="docker使用笔记">
-<meta property="og:url" content="http://blog.foryung.com/2017/06/29/docker使用笔记/index.html">
+<meta property="og:title" content="gcloud设置代理">
+<meta property="og:url" content="http://blog.foryung.com/2018/06/14/gcloud设置代理/index.html">
 <meta property="og:site_name" content="Gofoer">
-<meta property="og:description" content="docker 脑残粉">
+<meta property="og:description" content="详情请看 csdn">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p1teq0wgy.bkt.clouddn.com/docker.jpg">
-<meta property="og:updated_time" content="2018-06-16T14:57:26.000Z">
+<meta property="og:updated_time" content="2018-06-27T10:42:56.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="docker使用笔记">
-<meta name="twitter:description" content="docker 脑残粉">
-<meta name="twitter:image" content="http://p1teq0wgy.bkt.clouddn.com/docker.jpg">
+<meta name="twitter:title" content="gcloud设置代理">
+<meta name="twitter:description" content="详情请看 csdn">
 
 
 
@@ -136,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.foryung.com/2017/06/29/docker使用笔记/"/>
+  <link rel="canonical" href="http://blog.foryung.com/2018/06/14/gcloud设置代理/"/>
 
 
 
 
 
-  <title>docker使用笔记 | Gofoer</title>
+  <title>gcloud设置代理 | Gofoer</title>
   
 
 
@@ -285,7 +283,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.foryung.com/2017/06/29/docker使用笔记/">
+    <link itemprop="mainEntityOfPage" href="http://blog.foryung.com/2018/06/14/gcloud设置代理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zihua">
@@ -302,7 +300,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">docker使用笔记</h1>
+          <h1 class="post-title" itemprop="name headline">gcloud设置代理</h1>
         
 
         <div class="post-meta">
@@ -314,8 +312,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-29T21:06:05+08:00">
-                2017-06-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-14T21:50:41+08:00">
+                2018-06-14
               </time>
             
 
@@ -337,8 +335,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/docker/" itemprop="url" rel="index">
-                    <span itemprop="name">docker</span>
+                  <a href="/categories/k8s/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s</span>
                   </a>
                 </span>
 
@@ -374,66 +372,11 @@
       
 
       
-        <blockquote>
-<p>docker 脑残粉</p>
+        <a id="more"></a>
+<blockquote>
+<p>详情请看 <a href="https://blog.csdn.net/qianghaohao/article/details/79942485" target="_blank" rel="noopener">csdn</a></p>
 </blockquote>
-<p><img src="http://p1teq0wgy.bkt.clouddn.com/docker.jpg" alt="docker"></p>
-<a id="more"></a>
-<h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h3><ol>
-<li>curl -sSL <a href="http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/intranet" target="_blank" rel="noopener">http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/intranet</a> | sh -</li>
-<li>非root用户使用docker sudo usermod -aG docker userName</li>
-<li>重启电脑</li>
-</ol>
-<h3 id="在docker中部署mongodb"><a href="#在docker中部署mongodb" class="headerlink" title="在docker中部署mongodb"></a>在docker中部署mongodb</h3><ul>
-<li>docker run –name mongo3 -p 27018:27017 -d -v /home/yahaa/dockerdata:/data/db mongo –auth</li>
-</ul>
-<pre><code>解释：
-    --name mongo3 指定容器名字为　mongo3
-    -p 27018:27017 指定本机端口27018和容器端口27018绑定
-    -d 在后台中运行
-    -v 把本地的　/home/yahaa/dockerdata挂载到　/data/db
-    mongo 表示自动拉取的镜像
-    --auth 表示开启授权
-</code></pre><ul>
-<li>docker exec -it mongo3 mongo admin</li>
-</ul>
-<pre><code>解释：
-    终端进入容器　mongo3 并且执行容器中的命令　mongo admin
-</code></pre><ul>
-<li>然后创建一个user administrator:</li>
-</ul>
-<pre><code>db.createUser({
-    user:&quot;zihua&quot;,
-    pwd:&quot;Asd123321&quot;,
-    roles:[{role:&quot;userAdminAnyDatabase&quot;,db:&quot;admin&quot;}
-    ]}
-);
 
-
-db.createUser(
-  {
-    user: &quot;yahaa&quot;,
-    pwd: &quot;Asd123321&quot;,
-    roles: [ { role: &quot;readWrite&quot;, db: &quot;chatapi&quot; },
-             { role: &quot;readWrite&quot;, db: &quot;chatapi-log&quot; } ]
-  }
-)
-</code></pre><ul>
-<li>详情参考下面博文<h4 id="docker-中mongodb-授权"><a href="#docker-中mongodb-授权" class="headerlink" title="docker 中mongodb 授权"></a>docker 中mongodb 授权</h4></li>
-<li><a href="https://blog.igevin.info/posts/docker-mongo-auth/" target="_blank" rel="noopener">参考博客</a></li>
-</ul>
-<h3 id="本地连接到阿里云mongodb"><a href="#本地连接到阿里云mongodb" class="headerlink" title="本地连接到阿里云mongodb"></a>本地连接到阿里云mongodb</h3><pre><code>//连接MongoDB并指定端口
-
-mongo 192.168.1.100:27017
-
-//连接到指定的MongoDB数据库
-
-mongo 192.168.1.100:27017/test
-
-//指定用户名和密码连接到指定的MongoDB数据库
-
-mongo 192.168.1.200:27017/test -u user -p password
-</code></pre>
       
     </div>
     
@@ -450,7 +393,7 @@ mongo 192.168.1.200:27017/test -u user -p password
       
         <div class="post-tags">
           
-            <a href="/tags/docker/" rel="tag"># docker</a>
+            <a href="/tags/gcloud/" rel="tag"># gcloud</a>
           
         </div>
       
@@ -463,8 +406,8 @@ mongo 192.168.1.200:27017/test -u user -p password
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/26/mongodb使用总结/" rel="next" title="mongodb 鉴权">
-                <i class="fa fa-chevron-left"></i> mongodb 鉴权
+              <a href="/2018/05/23/零基础入门计算机？/" rel="next" title="零基础入门计算机？">
+                <i class="fa fa-chevron-left"></i> 零基础入门计算机？
               </a>
             
           </div>
@@ -473,8 +416,8 @@ mongo 192.168.1.200:27017/test -u user -p password
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/08/17/nginx/" rel="prev" title="nginx 入门">
-                nginx 入门 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/06/16/ubuntu-server-16-04-跑-k8s-集群/" rel="prev" title="ubuntu server 16.04 跑 k8s 集群">
+                ubuntu server 16.04 跑 k8s 集群 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -527,17 +470,8 @@ mongo 192.168.1.200:27017/test -u user -p password
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://p1teq0wgy.bkt.clouddn.com/1514707487WechatIMG13.jpeg"
@@ -612,22 +546,6 @@ mongo 192.168.1.200:27017/test -u user -p password
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装docker"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x5B89;&#x88C5;docker" class="headerlink" title="&#x5B89;&#x88C5;docker"></a>&#x5B89;&#x88C5;docker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在docker中部署mongodb"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x5728;docker&#x4E2D;&#x90E8;&#x7F72;mongodb" class="headerlink" title="&#x5728;docker&#x4E2D;&#x90E8;&#x7F72;mongodb"></a>&#x5728;docker&#x4E2D;&#x90E8;&#x7F72;mongodb</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-中mongodb-授权"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#docker-&#x4E2D;mongodb-&#x6388;&#x6743;" class="headerlink" title="docker &#x4E2D;mongodb &#x6388;&#x6743;"></a>docker &#x4E2D;mongodb &#x6388;&#x6743;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本地连接到阿里云mongodb"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x672C;&#x5730;&#x8FDE;&#x63A5;&#x5230;&#x963F;&#x91CC;&#x4E91;mongodb" class="headerlink" title="&#x672C;&#x5730;&#x8FDE;&#x63A5;&#x5230;&#x963F;&#x91CC;&#x4E91;mongodb"></a>&#x672C;&#x5730;&#x8FDE;&#x63A5;&#x5230;&#x963F;&#x91CC;&#x4E91;mongodb</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

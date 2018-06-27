@@ -3,6 +3,99 @@
   
     
     <entry>
+      <title><![CDATA[ubuntu server 16.04 跑 k8s 集群]]></title>
+      <url>/2018/06/16/ubuntu-server-16-04-%E8%B7%91-k8s-%E9%9B%86%E7%BE%A4/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>网上一大片 k8s 集群的部署教程，，，我也来写一篇吧，至少我自己能看懂自己写的。</p>
+</blockquote>
+<p>![docker](<a href="http://p1teq0wgy.bkt.clouddn.com/docker.jpg" target="_blank" rel="noopener">http://p1teq0wgy.bkt.clouddn.com/docker.jpg</a></p>
+<a id="more"></a>
+<h3 id="1-服务器准备"><a href="#1-服务器准备" class="headerlink" title="1. 服务器准备"></a>1. 服务器准备</h3><ul>
+<li><p>本次部署采用的服务器是 ubuntu server 16.04，<a href="http://releases.ubuntu.com/16.04/ubuntu-16.04.4-server-amd64.iso" target="_blank" rel="noopener">下载地址</a></p>
+</li>
+<li><p>在 virtualbox 安装三份虚拟机，修改虚拟机 ip 为静态 ip 地址，hostname 分别如下表:</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>ip</th>
+<th style="text-align:right">hostname</th>
+<th style="text-align:center">user</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.0.110</td>
+<td style="text-align:right">master</td>
+<td style="text-align:center">zihua</td>
+</tr>
+<tr>
+<td>192.168.0.111</td>
+<td style="text-align:right">node1</td>
+<td style="text-align:center">zihua</td>
+</tr>
+<tr>
+<td>192.168.0.112</td>
+<td style="text-align:right">node2</td>
+<td style="text-align:center">zihua</td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-1-ubuntu-虚拟机节点环境准备-master-为例"><a href="#1-1-ubuntu-虚拟机节点环境准备-master-为例" class="headerlink" title="1.1 ubuntu 虚拟机节点环境准备(master 为例)"></a>1.1 ubuntu 虚拟机节点环境准备(master 为例)</h4><h5 id="1-1-1-修改-hostname"><a href="#1-1-1-修改-hostname" class="headerlink" title="1.1.1 修改 hostname"></a>1.1.1 修改 hostname</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/hostname</span><br></pre></td></tr></table></figure>
+<h5 id="1-1-2-修改-ip-为静态-ip-地址"><a href="#1-1-2-修改-ip-为静态-ip-地址" class="headerlink" title="1.1.2 修改 ip 为静态 ip 地址"></a>1.1.2 修改 ip 为静态 ip 地址</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/network/interfaces</span><br></pre></td></tr></table></figure>
+<h5 id="1-1-3-把-etc-network-interfaces-改为如下"><a href="#1-1-3-把-etc-network-interfaces-改为如下" class="headerlink" title="1.1.3 把 /etc/network/interfaces 改为如下:"></a>1.1.3 把 /etc/network/interfaces 改为如下:</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># This file describes the network interfaces available on your system</span></span><br><span class="line"><span class="comment"># and how to activate them. For more information, see interfaces(5).</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> /etc/network/interfaces.d/*</span><br><span class="line"></span><br><span class="line"><span class="comment"># The loopback network interface</span></span><br><span class="line">auto lo</span><br><span class="line">iface lo inet loopback</span><br><span class="line"></span><br><span class="line"><span class="comment"># The primary network interface</span></span><br><span class="line">auto enp0s3</span><br><span class="line">iface enp0s3 inet static</span><br><span class="line">address 192.168.0.110</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">network 192.168.0.0</span><br><span class="line">broadcast 192.168.0.255</span><br><span class="line">gateway 192.168.0.1</span><br><span class="line">dns-nameservers 192.168.0.1</span><br><span class="line">dns-search pcat</span><br></pre></td></tr></table></figure>
+<h5 id="1-1-4-修改软件源为国内软件源-vim-etc-apt-sources-list-内容如下"><a href="#1-1-4-修改软件源为国内软件源-vim-etc-apt-sources-list-内容如下" class="headerlink" title="1.1.4 修改软件源为国内软件源 vim /etc/apt/sources.list,内容如下:"></a>1.1.4 修改软件源为国内软件源 vim /etc/apt/sources.list,内容如下:</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># deb cdrom:[Ubuntu 16.04 LTS _Xenial Xerus_ - Release amd64 (20160420.1)]/ xenial main restricted</span></span><br><span class="line">deb-src http://archive.ubuntu.com/ubuntu xenial main restricted <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted multiverse universe <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted multiverse universe <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://archive.canonical.com/ubuntu xenial partner</span><br><span class="line">deb-src http://archive.canonical.com/ubuntu xenial partner</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted multiverse universe <span class="comment">#Added by software-properties</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security multiverse</span><br><span class="line">deb http://cz.archive.ubuntu.com/ubuntu trusty main</span><br></pre></td></tr></table></figure>
+<h4 id="1-2-安装-docker-（k8s-1-10-0，最高支持-docker-17-03"><a href="#1-2-安装-docker-（k8s-1-10-0，最高支持-docker-17-03" class="headerlink" title="1.2 安装 docker （k8s 1.10.0，最高支持 docker 17.03)"></a>1.2 安装 docker （k8s 1.10.0，最高支持 docker 17.03)</h4><h5 id="1-2-1-deb-方式安装docker-地址"><a href="#1-2-1-deb-方式安装docker-地址" class="headerlink" title="1.2.1 deb 方式安装docker 地址"></a>1.2.1 deb 方式安装docker <a href="https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce_17.03.0~ce-0~ubuntu-xenial_amd64.deb" target="_blank" rel="noopener">地址</a></h5><h4 id="1-3-安装-k8s"><a href="#1-3-安装-k8s" class="headerlink" title="1.3 安装 k8s"></a>1.3 安装 k8s</h4><h5 id="1-3-1-安装-apt-https"><a href="#1-3-1-安装-apt-https" class="headerlink" title="1.3.1 安装 apt-https"></a>1.3.1 安装 apt-https</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update &amp;&amp; apt-get install -y apt-transport-https</span><br></pre></td></tr></table></figure>
+<h5 id="1-3-2-添加-k8s-软件包"><a href="#1-3-2-添加-k8s-软件包" class="headerlink" title="1.3.2 添加 k8s 软件包"></a>1.3.2 添加 k8s 软件包</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add </span><br><span class="line"></span><br><span class="line"><span class="comment"># 注如果不行请自己下载 apt-key,然后再 cat apt-key | apt-key add</span></span><br></pre></td></tr></table></figure>
+<h5 id="1-3-3-添加-k8s-deb-包"><a href="#1-3-3-添加-k8s-deb-包" class="headerlink" title="1.3.3 添加 k8s deb 包"></a>1.3.3 添加 k8s deb 包</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">deb http://apt.kubernetes.io/ kubernetes-xenial main </span><br><span class="line">sudp apt update <span class="comment"># 注 如果被墙 请修改 apt 走代理</span></span><br><span class="line">sudo apt-get install -y kubelet=1.10.4-00 kubeadm=1.10.4-00 kubectl=1.10.4-00 kubernetes-cni=0.6.0-00</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># apt 走代理</span></span><br><span class="line"></span><br><span class="line">sudo vim /etc/apt/apt.conf</span><br><span class="line"></span><br><span class="line">填写如下内容:</span><br><span class="line">Acquire::http::proxy <span class="string">"http://192.168.0.100:1087/"</span>;</span><br><span class="line">Acquire::https::proxy <span class="string">"http://192.168.0.100:1087/"</span>;</span><br></pre></td></tr></table></figure>
+<h5 id="1-3-4-准备-k8s-所需要的镜像"><a href="#1-3-4-准备-k8s-所需要的镜像" class="headerlink" title="1.3.4 准备 k8s 所需要的镜像"></a>1.3.4 准备 k8s 所需要的镜像</h5><blockquote>
+<p>注:这个镜像在国内是无法正常下载的，需要进过中转站提前下载</p>
+</blockquote>
+<h5 id="1-3-5-swap-关闭"><a href="#1-3-5-swap-关闭" class="headerlink" title="1.3.5 swap 关闭"></a>1.3.5 swap 关闭</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo swapoff -a</span><br></pre></td></tr></table></figure>
+<h5 id="1-3-6-安装一定要指定版本"><a href="#1-3-6-安装一定要指定版本" class="headerlink" title="1.3.6 安装一定要指定版本"></a>1.3.6 安装一定要指定版本</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo kubeadm init --kubernetes-version=v1.10.0 --pod-network-cidr=10.244.0.0/16</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注 不指定 --kubernetes-version=v1.10.0 的话会导致镜像无法下载</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      
+        <categories>
+            
+            <category> k8s </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> k8s </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[gcloud设置代理]]></title>
+      <url>/2018/06/14/gcloud%E8%AE%BE%E7%BD%AE%E4%BB%A3%E7%90%86/</url>
+      <content type="html"><![CDATA[<a id="more"></a>
+<blockquote>
+<p>详情请看 <a href="https://blog.csdn.net/qianghaohao/article/details/79942485" target="_blank" rel="noopener">csdn</a></p>
+</blockquote>
+]]></content>
+      
+        <categories>
+            
+            <category> k8s </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> gcloud </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[零基础入门计算机？]]></title>
       <url>/2018/05/23/%E9%9B%B6%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%E8%AE%A1%E7%AE%97%E6%9C%BA%EF%BC%9F/</url>
       <content type="html"><![CDATA[<p><img src="http://p1lpgmbe0.bkt.clouddn.com/learn.jpeg" alt="golang"></p>
@@ -40,7 +133,7 @@
     </entry>
     
     <entry>
-      <title><![CDATA[c调用第三方库]]></title>
+      <title><![CDATA[c 使用笔记]]></title>
       <url>/2018/05/14/c%E8%B0%83%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/</url>
       <content type="html"><![CDATA[<blockquote>
 <p>go、java等其它高级语言调用第三方库是非常简单的，但是到了c就不一样了(其实还是简单只是我不会)。</p>
@@ -59,6 +152,32 @@
 <p>用 gcc 编译</p>
 </blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o main main.c -L/usr/<span class="built_in">local</span>/lib -lhiredis</span><br></pre></td></tr></table></figure>
+<h4 id="c-静态连接库的制作"><a href="#c-静态连接库的制作" class="headerlink" title="c 静态连接库的制作"></a>c 静态连接库的制作</h4><ul>
+<li>现有 hello.c hello.h 如何把 hello.c制作成成一个静态连接库呢？</li>
+</ul>
+<blockquote>
+<p>hello.h</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> HELLO_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> HELLO_H</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">hello</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>hello.c</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">hello</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>制作静态连接库</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc -o hello.o -c hello.c // 生成 .o 文件</span><br><span class="line">ar -r libhello.a hello.o  // 生成 .a 文件</span><br></pre></td></tr></table></figure>
+<ul>
+<li>静态连接库使用<blockquote>
+<p>c/c++使用第三方库要指定头文件所在位置，以及静态连接库，举个例子如下:</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp hello.h /usr/<span class="built_in">local</span>/include</span><br><span class="line">cp libhello.a /usr/<span class="built_in">local</span>/bin</span><br><span class="line"><span class="comment"># 这里我 cp 到指定目录方便举例子</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>main.c 如下<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"hello.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	hello(<span class="string">"aabbcc"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>编译运行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o main -I/usr/<span class="built_in">local</span>/include -L/usr/<span class="built_in">local</span>/bin -lhello main.c</span><br></pre></td></tr></table></figure></p>
+</blockquote>
 ]]></content>
       
         <categories>
